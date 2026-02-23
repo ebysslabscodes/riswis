@@ -1,0 +1,14 @@
+[
+    {
+        "doc_id": "doc_001",
+        "tier": "T1"
+    },
+    {
+        "doc_id": "doc_002",
+        "tier": "T3"
+    },
+    {
+        "doc_id": "doc_003",
+        "tier": "T2"
+    }
+]

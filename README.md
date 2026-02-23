@@ -1,12 +1,33 @@
-# RISWIS
+RISWIS
 
-Retrieval Integrity + Source-Weighted Ingestion Sandbox
+Retrieval Integrity & Structured Weighted Information System
 
-RISWIS explores how metadata tier-weighting and retrieval traceability affect output stability in a small local RAG system.
+Phase 1 — Deterministic Ranking Skeleton
 
-Focus:
-- ingestion discipline
-- metadata-aware ranking
-- audit logging of retrieval decisions
+Phase 1 establishes the structural foundation for RISWIS:
 
-Not a model. No training. No tuning.
+Config-driven tier multipliers
+
+Deterministic scoring (seed-controlled)
+
+Top-K enforcement
+
+Reproducible audit logging
+
+Who / Why / Seed trace metadata
+
+Runnable sample manifest
+
+Similarity scores are currently simulated to validate ranking logic and audit structure independently of embedding variability.
+
+This phase focuses on:
+
+Separation of configuration and logic
+
+Reproducibility
+
+Structured trust and traceability
+
+Layered system development
+
+Future phases will integrate embedding-based similarity while preserving deterministic audit discipline.

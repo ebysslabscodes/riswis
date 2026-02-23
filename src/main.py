@@ -12,10 +12,16 @@ def load_config(path):
 def load_manifest(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+    
+def rank_results(results):
+    return sorted(results, key=lambda x: x["weighted_score"], reverse=True)
 
 def log_run(top_results, config, run_reason):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/riswis_run_{timestamp}.log"
+
+    os.makedirs("logs", exist_ok=True)
+
 
     run_user = getpass.getuser()
     seed = config["retrieval"].get("seed", None)
@@ -58,20 +64,24 @@ if __name__ == "__main__":
     for doc in documents:
         similarity = random.uniform(0.2, 0.9)
 
-        tier = doc["tier"]
-        multiplier = tier_multipliers[tier]
+    tier = doc["tier"]
 
-        weighted_score = similarity * multiplier
+    if tier not in tier_multipliers:
+        raise ValueError(f"Unknown tier '{tier}' in manifest.")
 
-        results.append({
-            "doc_id": doc["doc_id"],
-            "tier": tier,
-            "similarity": similarity,
-            "multiplier": multiplier,
-            "weighted_score": weighted_score
-        })
+    multiplier = tier_multipliers[tier]
 
-    results.sort(key=lambda x: x["weighted_score"], reverse=True)
+    weighted_score = similarity * multiplier
+
+    results.append({
+        "doc_id": doc["doc_id"],
+        "tier": tier,
+        "similarity": similarity,
+        "multiplier": multiplier,
+        "weighted_score": weighted_score
+    })
+
+    results = rank_results(results)
 
     top_k = config["retrieval"]["top_k"]
     top_results = results[:top_k]

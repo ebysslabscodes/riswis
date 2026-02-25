@@ -3,25 +3,30 @@ import os
 import random
 import getpass
 
+from src.retrieval.embedder import LocalEmbedder
+from src.retrieval.similarity import build_candidates
 from datetime import datetime
+
 
 def load_config(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def load_manifest(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
-    
+
+
 def rank_results(results):
     return sorted(results, key=lambda x: x["weighted_score"], reverse=True)
+
 
 def log_run(top_results, config, run_reason):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/riswis_run_{timestamp}.log"
 
     os.makedirs("logs", exist_ok=True)
-
 
     run_user = getpass.getuser()
     seed = config["retrieval"].get("seed", None)
@@ -35,7 +40,9 @@ def log_run(top_results, config, run_reason):
 
         log_file.write("Configuration:\n")
         log_file.write(f"top_k: {config['retrieval']['top_k']}\n")
-        log_file.write(f"tier_multipliers: {config['retrieval']['tier_multipliers']}\n\n")
+        log_file.write(
+            f"tier_multipliers: {config['retrieval']['tier_multipliers']}\n\n"
+        )
 
         log_file.write("Results:\n")
         for i, r in enumerate(top_results, start=1):
@@ -47,39 +54,50 @@ def log_run(top_results, config, run_reason):
 
     print(f"\nLog written to: {log_filename}")
 
+
 if __name__ == "__main__":
     manifest_path = os.path.join("data", "manifest.json")
 
     if not os.path.exists(manifest_path):
         manifest_path = os.path.join("data", "sample_manifest.json")
+
     documents = load_manifest(manifest_path)
     print(f"Using manifest: {manifest_path}")
+
     config_path = os.path.join("config", "settings.json")
     config = load_config(config_path)
-    seed = config["retrieval"].get("seed", 42)
-    random.seed(seed)
+
     tier_multipliers = config["retrieval"]["tier_multipliers"]
     results = []
 
-    for doc in documents:
-        similarity = random.uniform(0.2, 0.9)
+    # Phase 2 retrieval: embed query -> raw cosine similarities
+    embedder = LocalEmbedder(model_name="all-MiniLM-L6-v2")
 
-    tier = doc["tier"]
+    query = "long horizon drift evaluation in adaptive systems"
+    q_vec = embedder.embed(query, normalize=True)
 
-    if tier not in tier_multipliers:
-        raise ValueError(f"Unknown tier '{tier}' in manifest.")
+    candidates = build_candidates(q_vec)
 
-    multiplier = tier_multipliers[tier]
+    for c in candidates:
+        doc_id = c["doc_id"]
+        tier = c["tier"]
+        similarity = c["raw_sim"]
 
-    weighted_score = similarity * multiplier
+        if tier not in tier_multipliers:
+            raise ValueError(f"Unknown tier '{tier}' in manifest.")
 
-    results.append({
-        "doc_id": doc["doc_id"],
-        "tier": tier,
-        "similarity": similarity,
-        "multiplier": multiplier,
-        "weighted_score": weighted_score
-    })
+        multiplier = tier_multipliers[tier]
+        weighted_score = similarity * multiplier
+
+        results.append(
+            {
+                "doc_id": doc_id,
+                "tier": tier,
+                "similarity": similarity,
+                "multiplier": multiplier,
+                "weighted_score": weighted_score,
+            }
+        )
 
     results = rank_results(results)
 

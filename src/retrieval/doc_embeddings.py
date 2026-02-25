@@ -49,6 +49,17 @@ def sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def sha256_manifest_json(path: Path) -> str:
+    """
+    Stable hash of manifest.json content.
+
+    Canonicalizes JSON so hash doesn't change due to whitespace or key order.
+    """
+    obj = json.loads(path.read_text(encoding="utf-8"))
+    canonical = json.dumps(obj, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def load_manifest(manifest_path: Path) -> List[Dict[str, Any]]:
     """
     Load the document manifest.
@@ -126,7 +137,7 @@ def write_embedding_manifest(
 
     Scope: intentionally minimal (Phase 2).
     """
-    source_manifest_hash = sha256_text(source_manifest_path.read_text(encoding="utf-8"))
+    source_manifest_hash = sha256_manifest_json(source_manifest_path)
 
     record = {
         "model_name": model_name,

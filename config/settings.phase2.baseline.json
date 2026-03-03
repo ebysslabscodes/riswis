@@ -1,0 +1,17 @@
+{
+    "project": "riswis",
+    "retrieval": {
+        "top_k": 5,
+        "min_similarity": 0.0,
+        "seed": 42,
+        "tier_multipliers": {
+            "T1": 1.5,
+            "T2": 1.0,
+            "T3": 0.7
+        }
+    },
+    "logging": {
+        "log_dir": "logs",
+        "log_level": "INFO"
+    }
+}

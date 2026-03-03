@@ -1,0 +1,32 @@
+(.venv) PS C:\Users\ebyss\Desktop\riswis> python -m src.retrieval.doc_embeddings
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|██████████████████████████| 103/103 [00:00<00:00, 1071.78it/s, Materializing param=pooler.dense.weight]
+BertModel LOAD REPORT from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  |
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  |
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Saved: C:\Users\ebyss\Desktop\riswis\data\doc_embeddings.npz
+Saved: C:\Users\ebyss\Desktop\riswis\data\doc_meta.jsonl
+Saved: C:\Users\ebyss\Desktop\riswis\data\embeddings_manifest.json
+Docs: 2 | Dim: 384 | Normalize: True
+(.venv) PS C:\Users\ebyss\Desktop\riswis> python -m src.main "drift evaluation"
+Using manifest: data\manifest.json
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|██████████████████████████| 103/103 [00:00<00:00, 1056.22it/s, Materializing param=pooler.dense.weight]
+BertModel LOAD REPORT from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  |
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  |
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+Ranked results:
+doc_001 | tier=T1 | sim=0.664 | mult=1.5 | weighted=0.996
+doc_002 | tier=T3 | sim=0.495 | mult=0.7 | weighted=0.347
+
+Log written to: logs/riswis_run_20260303_032730.log
+(.venv) PS C:\Users\ebyss\Desktop\riswis> 

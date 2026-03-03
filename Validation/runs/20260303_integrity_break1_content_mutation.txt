@@ -1,0 +1,31 @@
+(.venv) PS C:\Users\ebyss\Desktop\riswis> python -m src.main "drift evaluation"
+Using manifest: data\manifest.json
+Loading weights: 100%|██████████████████████████| 103/103 [00:00<00:00, 1193.13it/s, Materializing param=pooler.dense.weight]
+BertModel LOAD REPORT from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  |
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  |
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+Ranked results:
+doc_001 | tier=T1 | sim=0.664 | mult=1.5 | weighted=0.996
+doc_002 | tier=T3 | sim=0.495 | mult=0.7 | weighted=0.347
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\ebyss\Desktop\riswis\src\main.py", line 181, in <module>
+    verify_embeddings_match_manifest(manifest_path, embedding_info)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebyss\Desktop\riswis\src\main.py", line 57, in verify_embeddings_match_manifest
+    raise RuntimeError(
+    ...<4 lines>...
+    )
+RuntimeError: Embeddings/manifest mismatch.
+- embeddings_manifest.source_manifest_hash: b6ffd330aada55196fc11798de6d9039ca5d3f1320612ba642c3b7306575b8c7
+- current manifest.json hash:              787ebc362c6a8d634d88fa56834865ede493283e0b4e7a7343ba426bb8904cab
+
+Fix: re-run `python -m src.retrieval.doc_embeddings` to regenerate cached embeddings.
+(.venv) PS C:\Users\ebyss\Desktop\riswis> 

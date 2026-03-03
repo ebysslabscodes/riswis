@@ -1,0 +1,20 @@
+RISWIS Run Log
+Timestamp: 20260302_043218
+User: ebyss
+Reason: manual_test
+Seed: 42
+
+Configuration:
+top_k: 5
+tier_multipliers: {'T1': 1.5, 'T2': 1.0, 'T3': 0.7}
+
+Embedding Context:
+model_name: all-MiniLM-L6-v2
+embedding_dim: 384
+normalized: True
+source_manifest_hash: b6ffd330aada55196fc11798de6d9039ca5d3f1320612ba642c3b7306575b8c7
+created_at_utc: 2026-02-25T07:55:48.403472+00:00
+
+Results:
+#1 doc_001 | sim=0.029 × mult(T1)=1.5 => weighted=0.043
+#2 doc_002 | sim=0.016 × mult(T3)=0.7 => weighted=0.011

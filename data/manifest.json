@@ -1,0 +1,16 @@
+[
+    {
+        "doc_id": "doc_001",
+        "title": "Peer Reviewed Paper on Drift",
+        "tier": "T1",
+        "source": "arxiv",
+        "content": "Long horizon drift evaluation in adaptive systems."
+    },
+    {
+        "doc_id": "doc_002",
+        "title": "Forum Discussion on Drift",
+        "tier": "T3",
+        "source": "reddit",
+        "content": "I think models drift over time because data changes."
+    }
+]

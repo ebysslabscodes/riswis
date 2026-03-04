@@ -62,7 +62,7 @@ def verify_embeddings_match_manifest(manifest_path: str, embedding_info: dict) -
         )
 
 
-def log_run(top_results, config, run_reason, embedding_info=None):
+def log_run(top_results, config, run_reason, query, embedding_info=None):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/riswis_run_{timestamp}.log"
 
@@ -77,6 +77,7 @@ def log_run(top_results, config, run_reason, embedding_info=None):
         log_file.write(f"User: {run_user}\n")
         log_file.write(f"Reason: {run_reason}\n")
         log_file.write(f"Seed: {seed}\n\n")
+        log_file.write(f"Query: {query}\n\n")
 
         log_file.write("Configuration:\n")
         log_file.write(f"top_k: {config['retrieval']['top_k']}\n")
@@ -133,6 +134,13 @@ if __name__ == "__main__":
     if not query:
         raise ValueError("Query cannot be empty.")
 
+    embedding_manifest_path = os.path.join("data", "embeddings_manifest.json")
+    embedding_info = None
+
+    if os.path.exists(embedding_manifest_path):
+        embedding_info = load_embeddings_manifest(embedding_manifest_path)
+        verify_embeddings_match_manifest(manifest_path, embedding_info)
+
     q_vec = embedder.embed(query, normalize=True)
 
     candidates = build_candidates(q_vec)
@@ -173,10 +181,4 @@ if __name__ == "__main__":
         )
 
     run_reason = "manual_test"
-
-    embedding_manifest_path = os.path.join("data", "embeddings_manifest.json")
-    embedding_info = None
-    if os.path.exists(embedding_manifest_path):
-        embedding_info = load_embeddings_manifest(embedding_manifest_path)
-        verify_embeddings_match_manifest(manifest_path, embedding_info)
-    log_run(top_results, config, run_reason, embedding_info=embedding_info)
+    log_run(top_results, config, run_reason, query, embedding_info=embedding_info)

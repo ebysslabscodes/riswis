@@ -2,11 +2,9 @@ RISWIS
 
 Retrieval Integrity & Structured Weighted Information System
 
-RISWIS is an experimental retrieval framework that separates semantic similarity from ranking governance, allowing trust weighting and ranking behavior to remain explicit, configurable, and auditable.
+RISWIS explores a retrieval architecture where semantic similarity and ranking governance are separated so that trust-weighting policies remain explicit, configurable, and auditable.
 
-Many retrieval systems mix similarity scoring, heuristics, and policy decisions inside opaque ranking logic.
-
-RISWIS explores a simpler structure:
+Many retrieval systems mix similarity scoring, heuristics, and policy decisions inside opaque ranking logic. RISWIS makes that policy layer visible and reproducible.
 
 query
 ↓
@@ -18,11 +16,11 @@ tier-weighted governance layer
 ↓
 ranked output
 
-The goal is not to eliminate bias, but to make ranking policy visible, reproducible, and inspectable.
+RISWIS does not attempt to eliminate ranking bias. Instead, it exposes ranking policy so weighting decisions can be inspected, reproduced, and revised.
 
 Retrieval Integrity
 
-In RISWIS, retrieval integrity means that ranking results are produced under conditions that are transparent, reproducible, and resistant to silent system drift.
+In RISWIS, retrieval integrity means ranking results are produced under conditions that are transparent, reproducible, and resistant to silent system drift.
 
 Integrity in this framework requires:
 

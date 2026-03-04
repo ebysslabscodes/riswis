@@ -2,111 +2,172 @@ RISWIS
 
 Retrieval Integrity & Structured Weighted Information System
 
-Why This Exists
+RISWIS is an experimental retrieval framework that separates semantic similarity from ranking governance, allowing trust weighting and ranking behavior to remain explicit, configurable, and auditable.
 
-Modern LLM-adjacent retrieval systems frequently combine similarity scoring, heuristic adjustments, and trust weighting in ways that are implicit, undocumented, or difficult to reproduce.
+Many retrieval systems mix similarity scoring, heuristics, and policy decisions inside opaque ranking logic.
 
-When ranking logic is opaque, systems risk amplifying “junk in, junk out” dynamics through hidden policy decisions.
+RISWIS explores a simpler structure:
 
-RISWIS isolates the retrieval policy layer and makes weighting behavior explicit, configurable, and auditable.
+query
+↓
+embedding similarity
+↓
+candidate documents
+↓
+tier-weighted governance layer
+↓
+ranked output
 
-The goal is not to eliminate bias, but to expose and structure it so that ranking decisions can be inspected, reproduced, and revised.
+The goal is not to eliminate bias, but to make ranking policy visible, reproducible, and inspectable.
+
+Retrieval Integrity
+
+In RISWIS, retrieval integrity means that ranking results are produced under conditions that are transparent, reproducible, and resistant to silent system drift.
+
+Integrity in this framework requires:
+
+explicit ranking policy (tier multipliers are configurable)
+
+deterministic configuration and logging
+
+separation between similarity scoring and ranking governance
+
+validation that cached embeddings match the document manifest
+
+If the corpus changes while cached embeddings remain stale, RISWIS aborts retrieval rather than producing potentially corrupted rankings.
 
 Project Status
 
-RISWIS has completed two foundational phases:
+RISWIS currently contains two completed phases.
 
-Phase 1 — Governance Isolation (tag: phase1-stable)
+Phase 1 — Governance Isolation
 
-Phase 2 — Local Embeddings + Integrity Verification (current main branch)
+Tag: phase1-stable
 
-Phase 1 established deterministic policy isolation.
-Phase 2 introduces real semantic retrieval while preserving policy transparency and auditability.
+Phase 1 isolates the ranking policy layer from similarity scoring.
 
-Phase 1 — Deterministic Ranking Skeleton
+Features:
 
-Phase 1 establishes the structural foundation for retrieval governance:
+deterministic ranking skeleton
 
-Config-driven tier multipliers
+config-driven tier multipliers
 
-Deterministic scoring (seed-controlled)
+strict tier validation
 
 Top-K enforcement
 
-Strict tier validation (unknown tiers raise explicit errors)
+seed-controlled reproducibility
 
-Isolated ranking policy via rank_results()
+structured audit logging
 
-Reproducible audit logging
+Similarity scores are simulated in this phase to validate ranking behavior independently of embedding models.
 
-Who / Why / Seed trace metadata
-
-Runnable sample manifest
-
-Similarity scores are simulated to validate ranking logic and audit structure independently of embedding variability.
-
-This phase prioritizes:
-
-Separation of configuration and logic
-
-Deterministic reproducibility
-
-Explicit policy weighting
-
-Structured trust and traceability
-
-Layered system development
-
-To reproduce Phase 1 exactly:
+Run Phase 1:
 
 git checkout phase1-stable
 python -m src.main
-Phase 2 — Local Embeddings + Integrity Verification
+Phase 2 — Semantic Retrieval + Integrity Verification
 
-Phase 2 integrates semantic similarity while preserving the deterministic policy layer established in Phase 1.
+Phase 2 introduces real semantic similarity while preserving the deterministic governance layer.
 
 Enhancements include:
 
-Sentence-transformer embeddings (all-MiniLM-L6-v2)
+sentence-transformer embeddings (all-MiniLM-L6-v2)
 
-Cached document vectors (doc_embeddings.npz)
+cached document vectors (doc_embeddings.npz)
 
-Cosine similarity scoring
-
-Canonical manifest hashing (prevents stale embedding misuse)
+cosine similarity retrieval
 
 CLI query input
 
-Policy layer unchanged
+manifest-bound embedding cache
 
-Phase 2 tests whether deterministic governance remains stable when real embedding-based similarity is introduced.
+fail-fast corpus integrity verification
 
-Tier Weighting: Open Design Surface
+Example run:
 
-The tier-weighting multiplier system remains the most structurally significant and currently unvalidated component of RISWIS.
+python -m src.main "drift evaluation"
 
-Open questions include:
+Example output:
 
-How are credibility tiers defined?
+doc_001 | tier=T1 | sim=0.664 | mult=1.5 | weighted=0.996
+doc_002 | tier=T3 | sim=0.495 | mult=0.7 | weighted=0.347
 
-Who assigns tier levels?
+Each run produces an audit log containing:
 
-What criteria determine tier placement?
+query
 
-How should tier definitions evolve over time?
+configuration
 
-Do tier assignments introduce systematic bias?
+tier multipliers
 
-RISWIS does not treat tiering as a solved problem.
+embedding metadata
 
-Instead, the framework:
+ranked results
 
-Makes tier definitions explicit
+Logs are written to:
 
-Separates tier assignment from similarity scoring
+logs/
+Integrity Enforcement
 
-Applies transparent, configurable multipliers
+RISWIS binds cached embeddings to the manifest used to generate them.
 
-Logs tier influence per run
+If the document manifest changes without regenerating embeddings, the system aborts before retrieval:
 
-Because tier weighting directly influences ranking order, its design must remain inspectable and versioned.
+RuntimeError: Embeddings/manifest mismatch.
+Fix: re-run `python -m src.retrieval.doc_embeddings`
+
+This prevents silent corruption of retrieval results due to stale embeddings.
+
+Validation artifacts are stored in:
+
+Validation/
+Tier Weighting (Open Design Surface)
+
+RISWIS exposes ranking governance through configurable tier multipliers.
+
+Example configuration:
+
+T1 = 1.5
+T2 = 1.0
+T3 = 0.7
+
+This layer intentionally remains an open design surface.
+
+Questions the framework explores include:
+
+how credibility tiers should be defined
+
+who assigns tier levels
+
+how tier systems evolve over time
+
+whether tier weighting introduces systematic bias
+
+RISWIS treats tier governance as an explicit and inspectable ranking policy rather than hidden ranking logic.
+
+Repository Structure
+config/        configuration files
+data/          document manifest and cached embeddings
+src/           retrieval and ranking implementation
+logs/          run audit logs
+Validation/    reproducibility tests and validation artifacts
+Current Scope
+
+RISWIS is not a benchmark system and makes no performance claims.
+
+The project focuses on:
+
+retrieval governance transparency
+
+deterministic ranking behavior
+
+embedding integrity verification
+
+structured weighting experiments
+
+Author
+
+Ronald Reed
+Independent Researcher
+Ebysslabs

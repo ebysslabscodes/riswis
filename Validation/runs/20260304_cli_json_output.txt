@@ -1,0 +1,25 @@
+Command:
+python -m src.main --query "drift evaluation" --topk 2 --reason json_test --json
+
+Output:
+{
+  "query": "drift evaluation",
+  "reason": "json_test",
+  "top_k": 2,
+  "results": [
+    {
+      "doc_id": "doc_001",
+      "tier": "T1",
+      "similarity": 0.664073,
+      "multiplier": 1.5,
+      "weighted_score": 0.996109
+    },
+    {
+      "doc_id": "doc_002",
+      "tier": "T3",
+      "similarity": 0.495122,
+      "multiplier": 0.7,
+      "weighted_score": 0.346585
+    }
+  ]
+}

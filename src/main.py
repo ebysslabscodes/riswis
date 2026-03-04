@@ -3,10 +3,11 @@ import os
 import getpass
 import hashlib
 import sys
+import argparse
+from datetime import datetime
 
 from src.retrieval.embedder import LocalEmbedder
 from src.retrieval.similarity import build_candidates
-from datetime import datetime
 
 
 def load_config(path):
@@ -62,7 +63,7 @@ def verify_embeddings_match_manifest(manifest_path: str, embedding_info: dict) -
         )
 
 
-def log_run(top_results, config, run_reason, query, embedding_info=None):
+def log_run(top_results, config, run_reason, query, top_k, embedding_info=None):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/riswis_run_{timestamp}.log"
 
@@ -77,10 +78,11 @@ def log_run(top_results, config, run_reason, query, embedding_info=None):
         log_file.write(f"User: {run_user}\n")
         log_file.write(f"Reason: {run_reason}\n")
         log_file.write(f"Seed: {seed}\n\n")
+
         log_file.write(f"Query: {query}\n\n")
 
         log_file.write("Configuration:\n")
-        log_file.write(f"top_k: {config['retrieval']['top_k']}\n")
+        log_file.write(f"top_k: {top_k}\n")
         log_file.write(
             f"tier_multipliers: {config['retrieval']['tier_multipliers']}\n\n"
         )
@@ -110,7 +112,6 @@ def log_run(top_results, config, run_reason, query, embedding_info=None):
 
 if __name__ == "__main__":
     manifest_path = os.path.join("data", "manifest.json")
-
     if not os.path.exists(manifest_path):
         manifest_path = os.path.join("data", "sample_manifest.json")
 
@@ -119,31 +120,55 @@ if __name__ == "__main__":
     config_path = os.path.join("config", "settings.json")
     config = load_config(config_path)
 
-    tier_multipliers = config["retrieval"]["tier_multipliers"]
-    results = []
+    # CLI interface
+    parser = argparse.ArgumentParser(description="RISWIS retrieval system")
+    parser.add_argument(
+        "--query",
+        type=str,
+        required=True,
+        help="Search query text",
+    )
+    parser.add_argument(
+        "--topk",
+        type=int,
+        default=config["retrieval"]["top_k"],
+        help="Number of top results to return",
+    )
+    parser.add_argument(
+        "--reason",
+        type=str,
+        default="manual_test",
+        help="Reason for run (logged for audit)",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Print results as JSON to stdout (machine-readable)",
+    )
 
-    # Phase 2 retrieval: embed query -> raw cosine similarities
-    embedder = LocalEmbedder(model_name="all-MiniLM-L6-v2")
-
-    # Query input (CLI > fallback default)
-    if len(sys.argv) > 1:
-        query = sys.argv[1].strip()
-    else:
-        query = "long horizon drift evaluation in adaptive systems"
-
+    args = parser.parse_args()
+    query = args.query.strip()
     if not query:
         raise ValueError("Query cannot be empty.")
 
+    top_k = args.topk
+    run_reason = args.reason
+
+    # Fail-fast integrity check BEFORE doing retrieval work
     embedding_manifest_path = os.path.join("data", "embeddings_manifest.json")
     embedding_info = None
-
     if os.path.exists(embedding_manifest_path):
         embedding_info = load_embeddings_manifest(embedding_manifest_path)
         verify_embeddings_match_manifest(manifest_path, embedding_info)
 
+    # Phase 2 retrieval: embed query -> raw cosine similarities
+    embedder = LocalEmbedder(model_name="all-MiniLM-L6-v2")
     q_vec = embedder.embed(query, normalize=True)
 
     candidates = build_candidates(q_vec)
+
+    tier_multipliers = config["retrieval"]["tier_multipliers"]
+    results = []
 
     for c in candidates:
         doc_id = c["doc_id"]
@@ -167,18 +192,35 @@ if __name__ == "__main__":
         )
 
     results = rank_results(results)
-
-    top_k = config["retrieval"]["top_k"]
     top_results = results[:top_k]
 
-    print("\nRanked results:")
-    for r in top_results:
-        print(
-            f'{r["doc_id"]} | tier={r["tier"]} | '
-            f'sim={r["similarity"]:.3f} | '
-            f'mult={r["multiplier"]} | '
-            f'weighted={r["weighted_score"]:.3f}'
-        )
+    if args.json:
+        payload = {
+            "query": query,
+            "reason": run_reason,
+            "top_k": top_k,
+            "results": [
+                {
+                    "doc_id": r["doc_id"],
+                    "tier": r["tier"],
+                    "similarity": round(float(r["similarity"]), 6),
+                    "multiplier": r["multiplier"],
+                    "weighted_score": round(float(r["weighted_score"]), 6),
+                }
+                for r in top_results
+            ],
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        print("\nRanked results:")
+        for r in top_results:
+            print(
+                f'{r["doc_id"]} | tier={r["tier"]} | '
+                f'sim={r["similarity"]:.3f} | '
+                f'mult={r["multiplier"]} | '
+                f'weighted={r["weighted_score"]:.3f}'
+            )
 
-    run_reason = "manual_test"
-    log_run(top_results, config, run_reason, query, embedding_info=embedding_info)
+    log_run(
+        top_results, config, run_reason, query, top_k, embedding_info=embedding_info
+    )

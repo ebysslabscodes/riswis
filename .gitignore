@@ -1,8 +1,16 @@
+# Virtual environment
 .venv/
+
+# Python cache
 __pycache__/
 *.pyc
+
+# Runtime logs
 logs/
+
+# Local data artifacts
 data/*
-!data/manifest.json
 !data/sample_manifest.json
+
+# OS junk
 .DS_Store

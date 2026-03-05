@@ -1,16 +1,27 @@
 # Virtual environment
+
 .venv/
 
 # Python cache
-__pycache__/
+
+**pycache**/
 *.pyc
 
 # Runtime logs
+
 logs/
 
-# Local data artifacts
+# Local benchmark/runtime output
+
+results/
+
+# Local generated embeddings / private runtime data
+
 data/*
 !data/sample_manifest.json
+!data/manifest.json
 
 # OS junk
+
 .DS_Store
+Thumbs.db

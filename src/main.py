@@ -174,8 +174,6 @@ def main() -> int:
     if not os.path.exists(manifest_path):
         manifest_path = os.path.join("data", "sample_manifest.json")
 
-    print(f"Using manifest: {manifest_path}")
-
     config_path = os.path.join("config", "settings.json")
     config = load_config(config_path)
     tier_multipliers = config["retrieval"]["tier_multipliers"]
@@ -206,6 +204,9 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+
+    if not args.json:
+        print(f"Using manifest: {manifest_path}")
 
     # Load docs once (used by list-docs and tier validation)
     docs = load_manifest_docs(manifest_path)
@@ -284,6 +285,16 @@ def main() -> int:
             "query": query,
             "reason": run_reason,
             "top_k": top_k,
+            "model_name": embedding_info.get("model_name") if embedding_info else None,
+            "manifest_hash": (
+                embedding_info.get("source_manifest_hash") if embedding_info else None
+            ),
+            "embedding_dim": (
+                embedding_info.get("embedding_dim") if embedding_info else None
+            ),
+            "embeddings_created_at_utc": (
+                embedding_info.get("created_at_utc") if embedding_info else None
+            ),
             "results": [
                 {
                     "doc_id": r["doc_id"],

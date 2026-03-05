@@ -1,32 +1,71 @@
-import json
-import os
+import argparse
 import getpass
 import hashlib
+import json
+import os
 import sys
-import argparse
 from datetime import datetime
+from typing import List, Optional
 
 from src.retrieval.embedder import LocalEmbedder
 from src.retrieval.similarity import build_candidates
 
 
-def load_config(path):
+def load_config(path: str) -> dict:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def rank_results(results):
+def rank_results(results: List[dict]) -> List[dict]:
     return sorted(results, key=lambda x: x["weighted_score"], reverse=True)
 
 
-def load_embeddings_manifest(path):
+def load_embeddings_manifest(path: str) -> dict:
     """
     Load minimal embedding metadata produced by Phase 2 doc embedding precompute.
-
     Expected file: data/embeddings_manifest.json
     """
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def load_manifest_docs(manifest_path: str) -> List[dict]:
+    """
+    Supports BOTH manifest formats:
+
+    Format A (current): top-level list
+      [
+        {"doc_id": "...", "tier": "...", "content": "...", ...},
+        ...
+      ]
+
+    Format B (optional future): object with "documents"
+      {
+        "documents": [
+          {"doc_id": "...", "tier": "...", "content": "...", ...}
+        ]
+      }
+    """
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        obj = json.load(f)
+
+    if isinstance(obj, list):
+        docs = obj
+    elif isinstance(obj, dict):
+        docs = obj.get("documents", [])
+        if not isinstance(docs, list):
+            raise ValueError("manifest.json 'documents' must be a list.")
+    else:
+        raise ValueError(
+            "manifest.json must be a list or an object containing 'documents'."
+        )
+
+    # Minimal validation
+    for d in docs:
+        if "doc_id" not in d or "tier" not in d:
+            raise ValueError("Each manifest doc must include 'doc_id' and 'tier'.")
+
+    return docs
 
 
 def sha256_manifest_json(path: str) -> str:
@@ -53,7 +92,6 @@ def verify_embeddings_match_manifest(manifest_path: str, embedding_info: dict) -
         raise ValueError("Embedding manifest missing 'source_manifest_hash'.")
 
     current = sha256_manifest_json(manifest_path)
-
     if current != expected:
         raise RuntimeError(
             "Embeddings/manifest mismatch.\n"
@@ -63,7 +101,28 @@ def verify_embeddings_match_manifest(manifest_path: str, embedding_info: dict) -
         )
 
 
-def log_run(top_results, config, run_reason, query, top_k, embedding_info=None):
+def validate_manifest_tiers(docs: List[dict], tier_multipliers: dict) -> None:
+    """
+    Fail fast if manifest contains tiers not present in config.
+    """
+    manifest_tiers = {d["tier"] for d in docs}
+    config_tiers = set(tier_multipliers.keys())
+
+    unknown = manifest_tiers - config_tiers
+    if unknown:
+        raise ValueError(
+            f"Manifest contains unknown tiers not in config: {sorted(unknown)}"
+        )
+
+
+def log_run(
+    top_results: List[dict],
+    config: dict,
+    run_reason: str,
+    query: str,
+    top_k: int,
+    embedding_info: Optional[dict] = None,
+) -> None:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/riswis_run_{timestamp}.log"
 
@@ -110,7 +169,7 @@ def log_run(top_results, config, run_reason, query, top_k, embedding_info=None):
     print(f"\nLog written to: {log_filename}")
 
 
-if __name__ == "__main__":
+def main() -> int:
     manifest_path = os.path.join("data", "manifest.json")
     if not os.path.exists(manifest_path):
         manifest_path = os.path.join("data", "sample_manifest.json")
@@ -119,15 +178,10 @@ if __name__ == "__main__":
 
     config_path = os.path.join("config", "settings.json")
     config = load_config(config_path)
+    tier_multipliers = config["retrieval"]["tier_multipliers"]
 
-    # CLI interface
     parser = argparse.ArgumentParser(description="RISWIS retrieval system")
-    parser.add_argument(
-        "--query",
-        type=str,
-        required=True,
-        help="Search query text",
-    )
+    parser.add_argument("--query", type=str, default=None, help="Search query text")
     parser.add_argument(
         "--topk",
         type=int,
@@ -145,11 +199,43 @@ if __name__ == "__main__":
         action="store_true",
         help="Print results as JSON to stdout (machine-readable)",
     )
+    parser.add_argument(
+        "--list-docs",
+        action="store_true",
+        help="List documents in the manifest and exit",
+    )
 
     args = parser.parse_args()
+
+    # Load docs once (used by list-docs and tier validation)
+    docs = load_manifest_docs(manifest_path)
+
+    # Utility: list docs and exit (NO embedding work, NO tier validation)
+    if args.list_docs:
+        print("\nDocuments in corpus:\n")
+        for d in docs:
+            extra = []
+            if d.get("title"):
+                extra.append(d["title"])
+            if d.get("source"):
+                extra.append(f"source={d['source']}")
+            extra_str = f" | {' | '.join(extra)}" if extra else ""
+            print(f'{d["doc_id"]} | tier={d["tier"]}{extra_str}')
+        print(f"\nTotal documents: {len(docs)}")
+        return 0
+
+    # Normal retrieval requires query
+    if args.query is None:
+        parser.error(
+            'Missing --query (unless --list-docs is used). Example: --query "drift evaluation"'
+        )
+
     query = args.query.strip()
     if not query:
-        raise ValueError("Query cannot be empty.")
+        parser.error("Query cannot be empty.")
+
+    # Validate tiers only for retrieval (fail fast before embedding work)
+    validate_manifest_tiers(docs, tier_multipliers)
 
     top_k = args.topk
     run_reason = args.reason
@@ -167,16 +253,15 @@ if __name__ == "__main__":
 
     candidates = build_candidates(q_vec)
 
-    tier_multipliers = config["retrieval"]["tier_multipliers"]
-    results = []
-
+    results: List[dict] = []
     for c in candidates:
         doc_id = c["doc_id"]
         tier = c["tier"]
         similarity = c["raw_sim"]
 
+        # Tier already validated against config, but keep guard anyway
         if tier not in tier_multipliers:
-            raise ValueError(f"Unknown tier '{tier}' in manifest.")
+            raise ValueError(f"Unknown tier '{tier}' in manifest/config.")
 
         multiplier = tier_multipliers[tier]
         weighted_score = similarity * multiplier
@@ -224,3 +309,8 @@ if __name__ == "__main__":
     log_run(
         top_results, config, run_reason, query, top_k, embedding_info=embedding_info
     )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

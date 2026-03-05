@@ -1,5 +1,3 @@
-# src/retrieval/embedder.py
-
 """
 RISWIS – Phase 2 Retrieval Layer
 --------------------------------
@@ -23,8 +21,34 @@ It provides a pure transformation:
 Downstream similarity and ranking layers consume these vectors.
 """
 
-from typing import Union, List
+from __future__ import annotations
+
+from typing import List, Union
+import logging
+import os
+
 import numpy as np
+
+# --- Silence Hugging Face / SentenceTransformers non-error noise (optional, UX-friendly) ---
+# Keep real exceptions visible; suppress routine model-load chatter.
+os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
+
+# Transformers has its own logging helpers (more reliable than std logger names alone)
+try:
+    from transformers.utils import logging as hf_logging
+
+    hf_logging.set_verbosity_error()
+    hf_logging.disable_progress_bar()
+except Exception:
+    pass
+
+# Standard logger suppression
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+
 from sentence_transformers import SentenceTransformer
 
 

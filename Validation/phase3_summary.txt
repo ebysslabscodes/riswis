@@ -1,0 +1,29 @@
+RISWIS Phase 3 Summary (Initial Controlled Corpus)
+
+Phase 3 extends RISWIS beyond inline manifest text by introducing a file-backed corpus.
+
+What changed from Phase 2
+- manifest now supports file paths
+- document embeddings resolve text from disk
+- embedding pipeline supports both inline content and file-backed documents
+
+What file-backed corpus introduced
+- four controlled documents stored under data/docs/
+- explicit tier variation across T1 / T2 / T3
+- visible separation between corpus content and manifest metadata
+
+What first validation proved
+- tier weighting can reorder final ranking when semantic similarity and trust conflict
+- strong semantic relevance can still remain dominant when policy pressure is weaker
+- trust-sensitive queries produce predictable ranking behavior
+
+First observed policy flip
+Query: drift evaluation
+
+Raw similarity favored:
+doc_002 (T3)
+
+Weighted ranking promoted:
+doc_001 (T1)
+
+This confirms explicit governance changes retrieval order under controlled conditions.

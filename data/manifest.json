@@ -1,16 +1,30 @@
 [
     {
         "doc_id": "doc_001",
-        "title": "Peer Reviewed Paper on Drift",
+        "title": "Controlled Drift Evaluation Paper",
         "tier": "T1",
         "source": "arxiv",
-        "content": "Long horizon drift evaluation in adaptive systems."
+        "path": "data/docs/doc_001.txt"
     },
     {
         "doc_id": "doc_002",
-        "title": "Forum Discussion on Drift",
+        "title": "Forum Summary of Drift Evaluation",
         "tier": "T3",
         "source": "reddit",
-        "content": "I think models drift over time because data changes."
+        "path": "data/docs/doc_002.txt"
+    },
+    {
+        "doc_id": "doc_003",
+        "title": "Semantic Retrieval Ranking Note",
+        "tier": "T2",
+        "source": "blog",
+        "path": "data/docs/doc_003.txt"
+    },
+    {
+        "doc_id": "doc_004",
+        "title": "Verified Documentation Visibility Note",
+        "tier": "T1",
+        "source": "docs",
+        "path": "data/docs/doc_004.txt"
     }
 ]

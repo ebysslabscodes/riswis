@@ -1,0 +1,1 @@
+Drift evaluation means checking whether a system changes over time, even if outputs look normal during short testing windows.

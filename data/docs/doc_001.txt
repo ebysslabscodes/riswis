@@ -1,0 +1,1 @@
+Drift evaluation in long-horizon adaptive systems requires controlled observation under fixed parameters. Stability can appear locally while hidden degradation accumulates over time.

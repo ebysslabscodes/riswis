@@ -1,14 +1,17 @@
 # src/retrieval/doc_embeddings.py
 
 """
-RISWIS – Phase 2 Retrieval Layer
---------------------------------
+RISWIS – Phase 2 / Phase 3 Retrieval Layer
+------------------------------------------
 
 Document embedding precompute + cache writer.
 
 This script:
     - Loads document records from data/manifest.json
-    - Generates embeddings for each document's `content`
+    - Resolves document text from either:
+        * inline `content`
+        * file-backed `path`
+    - Generates embeddings for each resolved document text
     - Writes embeddings to disk for fast, repeatable retrieval
 
 Outputs (aligned by row_index):
@@ -22,7 +25,7 @@ Architectural Boundary:
     - This module does NOT enforce top-K
     - This module does NOT implement governance logic
 
-It prepares retrieval artifacts only. Ranking policy remains in Phase 1 code.
+It prepares retrieval artifacts only. Ranking policy remains elsewhere.
 """
 
 import json
@@ -75,10 +78,21 @@ def load_manifest(manifest_path: Path) -> List[Dict[str, Any]]:
         ...
     ]
 
+    OR (Phase 3 file-backed format):
+    [
+        {
+            "doc_id": "doc_001",
+            "tier": "T1",
+            "path": "data/docs/doc_001.txt"
+            ... optional fields ...
+        },
+        ...
+    ]
+
     Minimal required keys:
         - doc_id
         - tier
-        - content
+        - one of: content OR path
     """
     with open(manifest_path, "r", encoding="utf-8") as f:
         docs = json.load(f)
@@ -87,15 +101,52 @@ def load_manifest(manifest_path: Path) -> List[Dict[str, Any]]:
         raise ValueError(f"Expected a non-empty list in {manifest_path}")
 
     for i, d in enumerate(docs):
-        for key in ("doc_id", "tier", "content"):
+        for key in ("doc_id", "tier"):
             if key not in d:
                 raise ValueError(f"Missing '{key}' in doc index {i}: {d}")
+
+        if "content" not in d and "path" not in d:
+            raise ValueError(
+                f"Doc index {i} must include either 'content' or 'path': {d}"
+            )
 
     return docs
 
 
+def resolve_doc_text(doc: Dict[str, Any]) -> str:
+    """
+    Resolve the actual text used for embedding.
+
+    Priority:
+        1. inline 'content'
+        2. file-backed 'path'
+    """
+    if "content" in doc and doc["content"] is not None:
+        text = str(doc["content"]).strip()
+        if not text:
+            raise ValueError(f"Doc '{doc['doc_id']}' has empty inline 'content'.")
+        return text
+
+    if "path" in doc and doc["path"] is not None:
+        doc_path = ROOT / Path(doc["path"])
+        if not doc_path.exists():
+            raise FileNotFoundError(
+                f"Doc '{doc['doc_id']}' path does not exist: {doc_path}"
+            )
+
+        text = doc_path.read_text(encoding="utf-8").strip()
+        if not text:
+            raise ValueError(f"Doc '{doc['doc_id']}' file is empty: {doc_path}")
+        return text
+
+    raise ValueError(
+        f"Doc '{doc.get('doc_id', '<unknown>')}' must include either 'content' or 'path'."
+    )
+
+
 def write_embeddings_and_meta(
     docs: List[Dict[str, Any]],
+    resolved_texts: List[str],
     vectors: np.ndarray,
     out_vec_path: Path,
     out_meta_path: Path,
@@ -112,14 +163,15 @@ def write_embeddings_and_meta(
 
     # Save aligned metadata as JSONL
     with open(out_meta_path, "w", encoding="utf-8") as f:
-        for i, d in enumerate(docs):
+        for i, (d, text) in enumerate(zip(docs, resolved_texts)):
             rec = {
                 "row_index": i,
                 "doc_id": d["doc_id"],
                 "tier": d["tier"],
                 "source": d.get("source"),
                 "title": d.get("title"),
-                "content_hash": sha256_text(d["content"]),
+                "path": d.get("path"),
+                "content_hash": sha256_text(text),
             }
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
@@ -135,7 +187,7 @@ def write_embedding_manifest(
     """
     Write minimal metadata describing how the current doc embeddings were produced.
 
-    Scope: intentionally minimal (Phase 2).
+    Scope: intentionally minimal.
     """
     source_manifest_hash = sha256_manifest_json(source_manifest_path)
 
@@ -157,17 +209,20 @@ def main() -> None:
 
     embedder = LocalEmbedder(model_name="all-MiniLM-L6-v2")
 
-    texts = [d["content"] for d in docs]
+    resolved_texts = [resolve_doc_text(d) for d in docs]
+
     normalized = True
     vectors = embedder.embed(
-        texts, normalize=normalized
+        resolved_texts, normalize=normalized
     )  # normalized vectors for cosine
 
     out_vec_path = DATA_DIR / EMBEDDINGS_FILENAME
     out_meta_path = DATA_DIR / META_FILENAME
     out_embed_manifest_path = DATA_DIR / EMBEDDINGS_MANIFEST_FILENAME
 
-    write_embeddings_and_meta(docs, vectors, out_vec_path, out_meta_path)
+    write_embeddings_and_meta(
+        docs, resolved_texts, vectors, out_vec_path, out_meta_path
+    )
 
     write_embedding_manifest(
         model_name=embedder.model_name,

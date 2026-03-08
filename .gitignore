@@ -4,7 +4,7 @@
 
 # Python cache
 
-**pycache**/
+__pycache__/
 *.pyc
 
 # Runtime logs
@@ -20,6 +20,8 @@ results/
 data/*
 !data/sample_manifest.json
 !data/manifest.json
+!data/docs/
+!data/docs/*.txt
 
 # OS junk
 

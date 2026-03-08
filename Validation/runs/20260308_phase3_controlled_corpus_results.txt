@@ -1,0 +1,106 @@
+RISWIS Phase 3 Controlled Corpus Validation
+Date: 2026-03-08
+Branch: phase3-dev
+
+Objective
+Validate how explicit tier-weighted governance changes ranking outcomes when semantic similarity and trust are intentionally placed in tension.
+
+Corpus Design
+Four file-backed documents were used.
+
+doc_001
+Tier: T1
+Source: arxiv
+Text:
+Drift evaluation in long-horizon adaptive systems requires controlled observation under fixed parameters. Stability can appear locally while hidden degradation accumulates over time.
+
+doc_002
+Tier: T3
+Source: reddit
+Text:
+Drift evaluation means checking whether a system changes over time, even if outputs look normal during short testing windows.
+
+doc_003
+Tier: T2
+Source: blog
+Text:
+Semantic retrieval systems compare embeddings to locate nearby candidates before ranking policy determines final output order.
+
+doc_004
+Tier: T1
+Source: docs
+Text:
+Verified technical documentation should remain visible even when semantic similarity is slightly lower than informal descriptions.
+
+Tier Multipliers
+T1 = 1.5
+T2 = 1.0
+T3 = 0.7
+
+Embedding Context
+Model: all-MiniLM-L6-v2
+Embedding dimension: 384
+Normalized: True
+
+--------------------------------------------------
+Query 1
+drift evaluation
+
+Raw similarity:
+doc_002 = 0.714
+doc_001 = 0.599
+
+Weighted ranking:
+doc_001 = 0.898
+doc_002 = 0.500
+doc_004 = 0.167
+doc_003 = 0.021
+
+Observation
+Raw semantic similarity favored doc_002 because wording was closer.
+Tier weighting promoted doc_001 to rank 1 because T1 trust outweighed T3.
+
+This demonstrates an explicit policy flip.
+
+--------------------------------------------------
+Query 2
+ranking policy in retrieval
+
+Raw similarity / weighted ranking:
+doc_003 = 0.709
+doc_004 = 0.300
+doc_002 = -0.002
+doc_001 = -0.010
+
+Observation
+doc_003 remained rank 1 because semantic relevance was strong enough that tier weighting did not override it.
+
+This demonstrates policy influence without forced dominance.
+
+--------------------------------------------------
+Query 3
+verified system documentation
+
+Raw similarity / weighted ranking:
+doc_004 = 0.873
+doc_002 = 0.189
+doc_001 = 0.160
+doc_003 = 0.009
+
+Observation
+High-trust documentation remained rank 1 under both semantic and policy weighting.
+
+This demonstrates expected behavior for trust-sensitive retrieval.
+
+--------------------------------------------------
+Summary
+
+Phase 3 controlled corpus confirms three behaviors:
+
+1. Tier weighting can reorder results when trust and similarity conflict.
+2. Strong semantic relevance can remain dominant when policy pressure is insufficient to overturn it.
+3. High-trust documents behave predictably under trust-sensitive queries.
+
+Result
+
+RISWIS governance layer now demonstrates visible ranking behavior on a file-backed corpus under controlled conditions.

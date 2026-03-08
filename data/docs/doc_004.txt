@@ -1,0 +1,1 @@
+Verified technical documentation should remain visible even when semantic similarity is slightly lower than informal descriptions.

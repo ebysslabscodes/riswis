@@ -1,0 +1,1 @@
+Semantic retrieval systems compare embeddings to locate nearby candidates before ranking policy determines final output order.

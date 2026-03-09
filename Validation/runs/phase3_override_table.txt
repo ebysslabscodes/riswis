@@ -1,16 +1,37 @@
 RISWIS Phase 3 Override Table
 
 Query: drift evaluation
-Raw top: doc_002 (T3) = 0.714
-Final top: doc_001 (T1) = 0.898
+Raw semantic winner: doc_002 (T3, sim=0.714)
+Weighted winner: doc_001 (T1, weighted=0.898)
 Classification: correct override
+Comment: Strong semantic T3 candidate was overtaken by T1 weighting under trust policy.
 
 Query: source quality ranking
-Raw close match: doc_010 (T3) = 0.483
-Final top: doc_006 (T1) = 0.768
-Classification: policy-aligned ranking
+Raw semantic winner: doc_010 (T3, sim=0.483)
+Weighted winner: doc_006 (T1, weighted=0.768)
+Classification: policy-aligned override
+Comment: T1 promotion occurred despite lower raw similarity, reflecting governance preference toward trusted material.
 
 Query: trusted documents lower rank
-Raw top: doc_011 (T3) = 0.697
-Final top: doc_006 (T1) = 0.664
+Raw semantic winner: doc_011 (T3, sim=0.697)
+Weighted winner: doc_006 (T1, weighted=0.664)
 Classification: strong override / review sensitivity
+Comment: Weighting flipped rank in a narrow margin case; useful sensitivity example for multiplier review.
+
+Query: semantic candidates
+Raw semantic winner: doc_007 (T2, sim=0.522)
+Weighted winner: doc_006 (T1, weighted=0.567)
+Classification: policy-aligned override
+Comment: T1 promotion occurred over a modest T2 semantic lead; defensible governance case.
+
+Query: technical reports
+Raw semantic winner: doc_006 (T1, sim=0.523)
+Weighted winner: doc_006 (T1, weighted=0.784)
+Classification: neutral / reinforcement
+Comment: Semantic and policy layers aligned naturally; weighting reinforced an already appropriate T1 result.
+
+Query: casual retrieval explanation
+Raw semantic winner: doc_007 (T2, sim=0.487)
+Weighted winner: doc_006 (T1, weighted=0.713)
+Classification: questionable override / possible over-correction
+Comment: T1 weighting displaced semantically stronger T2 explanatory content; useful sensitivity case.

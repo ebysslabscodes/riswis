@@ -1,43 +1,51 @@
-RISWIS Phase 3 Summary (Initial Controlled Corpus)
+RISWIS Phase 3 Summary
 
-Phase 3 extends RISWIS beyond inline manifest text by introducing a file-backed corpus.
+Phase 3 extended RISWIS from a file-backed retrieval corpus into controlled governance-behavior testing.
 
-What changed from Phase 2
-- manifest now supports file paths
-- document embeddings resolve text from disk
-- embedding pipeline supports both inline content and file-backed documents
+What changed from earlier Phase 3 work
 
-What file-backed corpus introduced
-- four controlled documents stored under data/docs/
-- explicit tier variation across T1 / T2 / T3
-- visible separation between corpus content and manifest metadata
+- manifest support for file-backed document paths was retained
+- document embeddings continued resolving text from disk
+- corpus expanded from initial controlled examples to a 12-document controlled set
+- tier distribution was balanced across T1 / T2 / T3
+- local embeddings were regenerated against the expanded corpus
+- manifest-integrity verification remained enforced through hash matching
 
-Why the file-backed corpus matters
-Phase 2 stored text inline inside manifest.json.
-Phase 3 separates document storage from ranking metadata.
+What Phase 3 tested
 
-This keeps corpus text inspectable as individual files and allows retrieval behavior to be tested under conditions closer to actual document handling.
+Phase 3 examined how explicit tier weighting changes retrieval outcomes across controlled semantic queries.
 
-What first validation proved
-- tier weighting can reorder final ranking when semantic similarity and trust conflict
-- strong semantic relevance can still remain dominant when policy pressure is weaker
-- trust-sensitive queries produce predictable ranking behavior
+This moved RISWIS beyond a simple file-backed corpus test and into observable governance behavior analysis.
 
-Canonical Example
+Observed behavior classes
 
-Query: drift evaluation
+- correct override cases where trusted documents overtook stronger lower-tier semantic matches
+- policy-aligned override cases where governance promoted a higher-tier result in a defensible way
+- neutral / reinforcement cases where semantic ranking and governance already aligned
+- sensitivity cases where tier weighting appeared to over-correct semantic relevance
 
-Raw similarity
-- doc_002 (T3) = 0.714
-- doc_001 (T1) = 0.599
+New visibility added
 
-After tier weighting
-- doc_001 = 0.898
-- doc_002 = 0.500
+- raw semantic rank
+- weighted rank
+- rank delta per document
 
-Interpretation
-Raw cosine similarity favored the lower-tier document.
+Why this matters
 
-Explicit tier weighting promoted the higher-trust document to rank 1 while leaving the similarity layer unchanged.
+RISWIS can now show not only which document wins after governance weighting, but also how far documents move when policy is applied.
 
-This confirms the RISWIS ranking layer is operating independently of semantic retrieval.
+This makes governance effects visible instead of implicit.
+
+Representative outcomes
+
+- some queries showed higher-trust T1 documents overtaking stronger T2 or T3 semantic matches
+- some queries showed no meaningful conflict between semantic relevance and trust weighting
+- some queries exposed strong rank displacement, including cases where a document moved from raw rank 8 to weighted rank 2
+
+Key result
+
+Controlled governance behavior in RISWIS is now observable, classifiable, and auditable across a fixed retrieval corpus.
+
+Phase 3 conclusion
+
+Phase 3 established that RISWIS is not only capable of deterministic tier-weighted retrieval, but can also expose when governance intervention helps, stays neutral, or may over-correct semantic relevance.

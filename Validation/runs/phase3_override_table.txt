@@ -16,7 +16,11 @@ Query: trusted documents lower rank
 Raw semantic winner: doc_011 (T3, sim=0.697)
 Weighted winner: doc_006 (T1, weighted=0.664)
 Classification: strong override / review sensitivity
-Comment: Weighting flipped rank in a narrow margin case; useful sensitivity example for multiplier review.
+Comment: Weighting flipped rank in a narrow-margin governance case; useful sensitivity example for multiplier review.
+Rank movement:
+- doc_011: raw_rank=1 -> weighted_rank=3
+- doc_006: raw_rank=3 -> weighted_rank=1
+- doc_004: raw_rank=4 -> weighted_rank=2
 
 Query: semantic candidates
 Raw semantic winner: doc_007 (T2, sim=0.522)
@@ -34,4 +38,9 @@ Query: casual retrieval explanation
 Raw semantic winner: doc_007 (T2, sim=0.487)
 Weighted winner: doc_006 (T1, weighted=0.713)
 Classification: questionable override / possible over-correction
-Comment: T1 weighting displaced semantically stronger T2 explanatory content; useful sensitivity case.
+Comment: T1 weighting displaced semantically stronger T2 explanatory content, and a second T1 document was lifted from deep raw rank into the top 2; strong sensitivity case.
+Rank movement:
+- doc_007: raw_rank=1 -> weighted_rank=3
+- doc_006: raw_rank=3 -> weighted_rank=1
+- doc_004: raw_rank=8 -> weighted_rank=2
+- doc_003: raw_rank=2 -> weighted_rank=4

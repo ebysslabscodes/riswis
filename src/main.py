@@ -162,6 +162,9 @@ def log_run(
         for i, r in enumerate(top_results, start=1):
             log_file.write(
                 f"#{i} {r['doc_id']} | "
+                f"raw_rank={r['raw_rank']} | "
+                f"weighted_rank={r['weighted_rank']} | "
+                f"delta={r['rank_delta']:+d} | "
                 f"sim={r['similarity']:.3f} × mult({r['tier']})={r['multiplier']} "
                 f"=> weighted={r['weighted_score']:.3f}\n"
             )
@@ -277,7 +280,18 @@ def main() -> int:
             }
         )
 
-    results = rank_results(results)
+    # Rank by raw similarity first
+    raw_ranked = sorted(results, key=lambda x: x["similarity"], reverse=True)
+    for i, r in enumerate(raw_ranked, start=1):
+        r["raw_rank"] = i
+
+    # Rank by weighted governance score
+    weighted_ranked = sorted(results, key=lambda x: x["weighted_score"], reverse=True)
+    for i, r in enumerate(weighted_ranked, start=1):
+        r["weighted_rank"] = i
+        r["rank_delta"] = r["raw_rank"] - r["weighted_rank"]
+
+    results = weighted_ranked
     top_results = results[:top_k]
 
     if args.json:
@@ -299,6 +313,9 @@ def main() -> int:
                 {
                     "doc_id": r["doc_id"],
                     "tier": r["tier"],
+                    "raw_rank": r["raw_rank"],
+                    "weighted_rank": r["weighted_rank"],
+                    "rank_delta": r["rank_delta"],
                     "similarity": round(float(r["similarity"]), 6),
                     "multiplier": r["multiplier"],
                     "weighted_score": round(float(r["weighted_score"]), 6),
@@ -312,6 +329,9 @@ def main() -> int:
         for r in top_results:
             print(
                 f'{r["doc_id"]} | tier={r["tier"]} | '
+                f'raw_rank={r["raw_rank"]} | '
+                f'weighted_rank={r["weighted_rank"]} | '
+                f'delta={r["rank_delta"]:+d} | '
                 f'sim={r["similarity"]:.3f} | '
                 f'mult={r["multiplier"]} | '
                 f'weighted={r["weighted_score"]:.3f}'

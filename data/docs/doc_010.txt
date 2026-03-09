@@ -1,0 +1,1 @@
+A lot of retrieval tools just return whatever sounds closest without checking source quality.

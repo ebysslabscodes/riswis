@@ -1,0 +1,1 @@
+People usually notice drift only after systems already behave strangely for a while.

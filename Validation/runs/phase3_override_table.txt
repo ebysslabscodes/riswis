@@ -1,0 +1,16 @@
+RISWIS Phase 3 Override Table
+
+Query: drift evaluation
+Raw top: doc_002 (T3) = 0.714
+Final top: doc_001 (T1) = 0.898
+Classification: correct override
+
+Query: source quality ranking
+Raw close match: doc_010 (T3) = 0.483
+Final top: doc_006 (T1) = 0.768
+Classification: policy-aligned ranking
+
+Query: trusted documents lower rank
+Raw top: doc_011 (T3) = 0.697
+Final top: doc_006 (T1) = 0.664
+Classification: strong override / review sensitivity

@@ -1,0 +1,1 @@
+Verified technical reports should remain visible when retrieval systems rank semantically similar but weaker sources.

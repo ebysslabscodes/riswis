@@ -1,0 +1,1 @@
+Embedding-based retrieval identifies nearby semantic candidates before ranking layers apply additional system rules.

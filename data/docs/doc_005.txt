@@ -1,0 +1,1 @@
+Long-horizon evaluation requires stable observation windows because short tests often hide slow degradation in adaptive systems.

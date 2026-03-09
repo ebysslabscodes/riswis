@@ -26,5 +26,61 @@
         "tier": "T1",
         "source": "docs",
         "path": "data/docs/doc_004.txt"
+    },
+    {
+        "doc_id": "doc_005",
+        "title": "Stable Observation Windows",
+        "tier": "T1",
+        "source": "technical_report",
+        "path": "data/docs/doc_005.txt"
+    },
+    {
+        "doc_id": "doc_006",
+        "title": "Verified Technical Reports",
+        "tier": "T1",
+        "source": "verified_docs",
+        "path": "data/docs/doc_006.txt"
+    },
+    {
+        "doc_id": "doc_007",
+        "title": "Embedding Candidate Retrieval",
+        "tier": "T2",
+        "source": "technical_notes",
+        "path": "data/docs/doc_007.txt"
+    },
+    {
+        "doc_id": "doc_008",
+        "title": "Ranking Systems Metadata",
+        "tier": "T2",
+        "source": "engineering_blog",
+        "path": "data/docs/doc_008.txt"
+    },
+    {
+        "doc_id": "doc_009",
+        "title": "Observed Drift Discussion",
+        "tier": "T3",
+        "source": "forum",
+        "path": "data/docs/doc_009.txt"
+    },
+    {
+        "doc_id": "doc_010",
+        "title": "Retrieval Tool Commentary",
+        "tier": "T3",
+        "source": "forum",
+        "path": "data/docs/doc_010.txt"
+    },
+    {
+        "doc_id": "doc_011",
+        "title": "Trusted Documents Rank Lower",
+        "tier": "T3",
+        "source": "forum",
+        "path": "data/docs/doc_011.txt"
+    },
+    {
+        "doc_id": "doc_012",
+        "title": "Ranking Problems in Forums",
+        "tier": "T3",
+        "source": "forum",
+        "path": "data/docs/doc_012.txt"
     }
 ]

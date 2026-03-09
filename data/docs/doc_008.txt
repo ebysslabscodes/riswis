@@ -1,0 +1,1 @@
+Ranking systems often combine similarity scores and metadata before selecting final document order.

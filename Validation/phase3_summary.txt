@@ -12,18 +12,32 @@ What file-backed corpus introduced
 - explicit tier variation across T1 / T2 / T3
 - visible separation between corpus content and manifest metadata
 
+Why the file-backed corpus matters
+Phase 2 stored text inline inside manifest.json.
+Phase 3 separates document storage from ranking metadata.
+
+This keeps corpus text inspectable as individual files and allows retrieval behavior to be tested under conditions closer to actual document handling.
+
 What first validation proved
 - tier weighting can reorder final ranking when semantic similarity and trust conflict
 - strong semantic relevance can still remain dominant when policy pressure is weaker
 - trust-sensitive queries produce predictable ranking behavior
 
-First observed policy flip
+Canonical Example
+
 Query: drift evaluation
 
-Raw similarity favored:
-doc_002 (T3)
+Raw similarity
+- doc_002 (T3) = 0.714
+- doc_001 (T1) = 0.599
 
-Weighted ranking promoted:
-doc_001 (T1)
+After tier weighting
+- doc_001 = 0.898
+- doc_002 = 0.500
 
-This confirms explicit governance changes retrieval order under controlled conditions.
+Interpretation
+Raw cosine similarity favored the lower-tier document.
+
+Explicit tier weighting promoted the higher-trust document to rank 1 while leaving the similarity layer unchanged.
+
+This confirms the RISWIS ranking layer is operating independently of semantic retrieval.

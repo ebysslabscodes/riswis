@@ -2,7 +2,7 @@
 
 **Retrieval Integrity & Structured Weighted Information System**
 
-A governance-first retrieval prototype: separate similarity scoring from ranking policy (tier weighting) with fail-fast corpus/embedding integrity and audit logs.
+A governance-first retrieval prototype that separates semantic similarity from ranking policy through explicit tier weighting, corpus integrity enforcement, and auditable ranking behavior.
 
 ```bash
 python -m src.main --query "drift evaluation" --topk 5 --json
@@ -10,13 +10,41 @@ python -m src.main --query "drift evaluation" --topk 5 --json
 
 ## Why RISWIS?
 
-Most retrieval systems mix similarity scoring, ranking heuristics, and trust policy inside a single scoring path.
+Most retrieval systems combine semantic similarity, ranking heuristics, and trust policy inside a single scoring path.
 
-When ranking policy changes (for example, prioritizing verified sources over low-trust content), developers often must modify retrieval logic directly.
+When trust rules change — for example, prioritizing verified sources over weakly verified content — developers often must alter retrieval logic directly or rely on opaque ranking adjustments that are difficult to inspect.
 
-RISWIS separates similarity from governance so ranking policy can be inspected, changed, validated, and audited independently of the embedding model.
+RISWIS isolates those concerns.
 
-RISWIS implements a retrieval architecture where semantic similarity and ranking governance remain explicit, configurable, and reproducible.
+Semantic similarity remains one layer.
+
+Governance remains another.
+
+This makes ranking policy visible, configurable, testable, and reproducible.
+
+RISWIS exists to explore a simple question:
+
+> What happens when semantic relevance and trust policy disagree — and can that disagreement remain interpretable?
+
+---
+
+## Why This Matters
+
+Modern retrieval pipelines increasingly influence what users see first, what evidence systems prefer, and what information appears trustworthy.
+
+Yet in many systems:
+
+* trust policy is hidden
+* ranking shifts are difficult to explain
+* source preference is embedded inside opaque scoring paths
+
+RISWIS treats ranking governance as a system component that should be inspectable rather than assumed.
+
+This makes it possible to observe:
+
+* when policy reinforces relevance
+* when policy remains neutral
+* when policy overrides stronger semantic matches
 
 ---
 
@@ -35,7 +63,7 @@ ranked output
 ```
 
 * Similarity scoring identifies candidate documents
-* A deterministic governance layer applies configurable tier multipliers before final ranking
+* A deterministic governance layer applies configurable tier multipliers
 * Similarity modeling and trust policy remain independent
 
 ---
@@ -44,6 +72,8 @@ ranked output
 
 * Separation of similarity modeling and ranking governance
 * Deterministic policy-based ranking layer
+* Raw semantic rank vs weighted rank visibility
+* Rank delta tracking per document
 * Manifest-bound embedding cache integrity verification
 * CLI interface with machine-readable JSON output
 * Structured audit logging for reproducibility
@@ -102,7 +132,7 @@ python -m src.main --list-docs
 
 RISWIS uses `sentence-transformers/all-MiniLM-L6-v2` for local embeddings.
 
-The model works without authentication, but unauthenticated requests may show warnings and may have lower rate limits.
+The model works without authentication, though rate limits and warnings may appear when unauthenticated.
 
 **Windows PowerShell**
 
@@ -123,9 +153,11 @@ Authentication is optional for normal local use.
 ## Example Output
 
 ```text
-doc_001 | tier=T1 | sim=0.664 | mult=1.5 | weighted=0.996
-doc_002 | tier=T3 | sim=0.495 | mult=0.7 | weighted=0.347
+doc_107 | tier=T1 | raw_rank=3 | weighted_rank=1 | delta=+2 | sim=0.365 | mult=1.5 | weighted=0.548
+doc_109 | tier=T3 | raw_rank=1 | weighted_rank=3 | delta=-2 | sim=0.630 | mult=0.7 | weighted=0.441
 ```
+
+This makes semantic ranking and policy intervention visible in the same output.
 
 ---
 
@@ -134,31 +166,22 @@ doc_002 | tier=T3 | sim=0.495 | mult=0.7 | weighted=0.347
 ### Without weighting
 
 ```text
-doc_001 = 0.664
-doc_002 = 0.495
+doc_A = 0.630
+doc_B = 0.365
 ```
 
 ### With RISWIS governance
 
 ```text
-doc_001 = 0.664 × 1.5 = 0.996
-doc_002 = 0.495 × 0.7 = 0.347
-```
-
-This demonstrates that ranking policy remains explicit and measurable.
-
-### Policy flip example
-
-```text
-doc_A = 0.61 × 0.7 = 0.427
-doc_B = 0.58 × 1.5 = 0.870
+doc_A = 0.630 × 0.7 = 0.441
+doc_B = 0.365 × 1.5 = 0.548
 ```
 
 Similarity-only ranking would place `doc_A` above `doc_B`.
 
 RISWIS governance ranks `doc_B` above `doc_A`.
 
-This demonstrates that policy remains an independent ranking layer.
+This demonstrates explicit policy intervention rather than hidden scoring.
 
 ---
 
@@ -176,82 +199,116 @@ T3 = 0.7   lower-trust sources
 
 ### Example source interpretation
 
-* T1 = peer-reviewed papers, verified documentation
-* T2 = general technical articles, unverified but credible sources
-* T3 = forums, user-generated content, weakly verified claims
+* T1 = peer-reviewed papers, verified documentation, formal references
+* T2 = technical articles, neutral summaries, credible reference text
+* T3 = forums, casual summaries, weakly verified content
 
-The tier layer remains configurable so ranking policy can evolve without modifying the similarity engine.
-
-RISWIS treats ranking policy as an explicit system component rather than hidden heuristics.
+The tier layer remains configurable so ranking policy can evolve without modifying similarity logic.
 
 ---
 
 ## Retrieval Integrity
 
-In RISWIS, retrieval integrity means ranking results are produced under conditions that are:
+In RISWIS, retrieval integrity means rankings are produced under conditions that remain:
 
 * transparent
 * reproducible
-* resistant to silent system drift
+* resistant to silent drift
 
 Integrity enforcement includes:
 
-* explicit ranking policy via configurable tier multipliers
-* deterministic configuration and audit logging
-* strict separation between similarity scoring and ranking governance
-* verification that cached embeddings match the document manifest
+* explicit ranking policy
+* deterministic configuration
+* audit logging
+* strict separation between similarity and governance
+* verification that cached embeddings match the current manifest
 
-If the corpus changes while cached embeddings remain stale, RISWIS aborts retrieval rather than producing potentially corrupted rankings.
+If the corpus changes while embeddings remain stale, RISWIS aborts retrieval rather than producing corrupted rankings.
 
 ---
 
 ## System Phases
 
-RISWIS development progressed in two implementation phases.
+RISWIS development currently spans four structured stages.
 
 ### Phase 1 — Governance Isolation
 
 **Tag:** `phase1-stable`
 
-Phase 1 implemented deterministic ranking without real embeddings.
+Phase 1 validated deterministic ranking without embeddings.
 
 #### Features
 
 * deterministic ranking skeleton
-* configuration-driven tier multipliers
-* strict tier validation
-* Top-K enforcement
-* seed-controlled reproducibility
-* structured audit logging
-
-Similarity scores were simulated to validate ranking behavior independently of embedding models.
-
-```bash
-git checkout phase1-stable
-python -m src.main
-```
+* tier multiplier enforcement
+* strict validation
+* Top-K control
+* seed reproducibility
+* structured logging
 
 ---
 
 ### Phase 2 — Semantic Retrieval + Integrity Verification
 
-Phase 2 integrates real semantic retrieval while preserving deterministic governance.
+**Tag:** `phase2-stable`
 
-Phase 2 uses a lightweight local embedding model validated against standard semantic similarity benchmarks before governance weighting is applied.
+Phase 2 introduced local semantic retrieval while preserving deterministic governance.
 
 #### Enhancements
 
 * sentence-transformer embeddings (`all-MiniLM-L6-v2`)
-* cached document embeddings (`doc_embeddings.npz`)
-* cosine similarity candidate retrieval
-* CLI query interface
-* JSON output mode
-* manifest-bound embedding cache
-* fail-fast corpus integrity verification
+* cached embeddings
+* cosine similarity retrieval
+* CLI query support
+* manifest-bound cache verification
 
-```bash
-python -m src.main --query "drift evaluation"
-```
+---
+
+### Phase 3 — Controlled Governance Behavior Validation
+
+Phase 3 expanded RISWIS into controlled ranking behavior analysis.
+
+#### Enhancements
+
+* expanded controlled corpus
+* raw rank visibility
+* weighted rank visibility
+* rank delta tracking
+* override mapping
+
+#### Phase 3 Result
+
+Three behavior classes became observable:
+
+* defensible override
+* neutral reinforcement
+* sensitivity / possible over-correction
+
+This established that RISWIS can classify policy behavior instead of only applying weighting.
+
+---
+
+### Phase 4A — Controlled External Topic Testing (in progress)
+
+Phase 4A introduces controlled semantic collisions outside RISWIS-native retrieval topics.
+
+#### Current additions
+
+A medical trio was added across trust tiers:
+
+* T1 formal medical phrasing
+* T2 neutral explanatory phrasing
+* T3 casual public-facing phrasing
+
+#### Initial observation
+
+Across blood-pressure-related queries:
+
+* formal sources often remain weighted winners
+* casual phrasing often wins raw semantic ranking
+* trust policy creates repeatable but interpretable overrides
+
+This is the first controlled evidence of semantic-policy tension outside native retrieval topics.
 
 ---
 
@@ -264,19 +321,23 @@ Embedding baseline validated using MTEB with `sentence-transformers/all-MiniLM-L
 * STSBenchmark Spearman: 0.8203
 * SICK-R Spearman: 0.7758
 
-**Note:** MTEB evaluates embedding model quality only. RISWIS tier weighting remains a separate governance layer.
+MTEB validates embedding quality only.
+
+RISWIS governance remains independent of embedding performance.
 
 ---
 
 ## Logging
 
-Each execution produces an audit log containing:
+Each run produces an audit log containing:
 
 * query
 * configuration
 * tier multipliers
 * embedding metadata
-* ranked results
+* raw rank
+* weighted rank
+* delta movement
 
 Logs are written to:
 
@@ -288,18 +349,18 @@ logs/
 
 ## Corpus Integrity Enforcement
 
-RISWIS binds cached embeddings to the manifest used to generate them.
+RISWIS binds embeddings to the manifest used to generate them.
 
-If the manifest changes without regenerating embeddings, retrieval aborts before ranking.
+If the manifest changes without regeneration:
 
 ```text
 RuntimeError: Embeddings/manifest mismatch.
 Fix: re-run python -m src.retrieval.doc_embeddings
 ```
 
-This prevents silent corruption caused by stale embeddings.
+This prevents silent ranking corruption.
 
-Validation artifacts are stored in:
+Validation artifacts remain in:
 
 ```text
 Validation/
@@ -311,28 +372,19 @@ Validation/
 
 RISWIS separates runtime telemetry from curated validation artifacts.
 
-### Runtime Logs (`logs/`)
+### Runtime Logs
 
-Every retrieval run produces an immutable log containing:
+Every retrieval run records immutable execution evidence.
 
-* query
-* ranking configuration
-* similarity scores
-* weighted ranking results
-* execution metadata
+### Validation Runs
 
-### Validation Runs (`Validation/runs/`)
+Controlled validation captures:
 
-Curated validation runs document controlled experiments including:
-
-* drift-related queries
-* unrelated query handling
-* tier weighting behavior
-* integrity violation scenarios
-* manifest mutation detection
-* embedding regeneration recovery
-
-These artifacts demonstrate deterministic behavior and fail-fast safeguards.
+* trust-sensitive queries
+* override behavior
+* integrity failures
+* regeneration recovery
+* rank movement analysis
 
 ---
 
@@ -340,11 +392,11 @@ These artifacts demonstrate deterministic behavior and fail-fast safeguards.
 
 ```text
 config/       configuration files
-data/         manifest and cached embeddings
+data/         manifest and embeddings
 src/          retrieval and ranking implementation
 logs/         runtime audit logs
-Validation/   validation runs and artifacts
-tools/        benchmark and utility scripts
+Validation/   controlled validation artifacts
+tools/        utility scripts
 ```
 
 ---
@@ -355,7 +407,7 @@ tools/        benchmark and utility scripts
 * Not a benchmark suite
 * Not a policy standard
 
-RISWIS is a governance prototype focused on transparent retrieval behavior.
+RISWIS is a governance-first retrieval prototype focused on transparent ranking behavior.
 
 ---
 

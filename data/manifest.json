@@ -82,5 +82,95 @@
         "tier": "T3",
         "source": "forum",
         "path": "data/docs/doc_012.txt"
+    },
+    {
+        "doc_id": "doc_101",
+        "title": "Formal retrieval ranking overview",
+        "tier": "T1",
+        "source": "formal_reference_style",
+        "path": "data/docs_phase4/doc_101.txt",
+        "source_name": "Controlled formal technical text",
+        "source_type": "formal_reference_style",
+        "source_ref": "phase4_internal_externalized_batch1"
+    },
+    {
+        "doc_id": "doc_102",
+        "title": "Neutral retrieval ranking summary",
+        "tier": "T2",
+        "source": "reference_style",
+        "path": "data/docs_phase4/doc_102.txt",
+        "source_name": "Controlled neutral reference text",
+        "source_type": "reference_style",
+        "source_ref": "phase4_internal_externalized_batch1"
+    },
+    {
+        "doc_id": "doc_103",
+        "title": "Casual retrieval ranking explanation",
+        "tier": "T3",
+        "source": "casual_summary_style",
+        "path": "data/docs_phase4/doc_103.txt",
+        "source_name": "Controlled casual explanatory text",
+        "source_type": "casual_summary_style",
+        "source_ref": "phase4_internal_externalized_batch1"
+    },
+    {
+        "doc_id": "doc_104",
+        "title": "Formal trust weighting overview",
+        "tier": "T1",
+        "source": "formal_reference_style",
+        "path": "data/docs_phase4/doc_104.txt",
+        "source_name": "Controlled formal technical text",
+        "source_type": "formal_reference_style",
+        "source_ref": "phase4_internal_externalized_batch1"
+    },
+    {
+        "doc_id": "doc_105",
+        "title": "Neutral trust weighting summary",
+        "tier": "T2",
+        "source": "reference_style",
+        "path": "data/docs_phase4/doc_105.txt",
+        "source_name": "Controlled neutral reference text",
+        "source_type": "reference_style",
+        "source_ref": "phase4_internal_externalized_batch1"
+    },
+    {
+        "doc_id": "doc_106",
+        "title": "Casual trust weighting explanation",
+        "tier": "T3",
+        "source": "casual_summary_style",
+        "path": "data/docs_phase4/doc_106.txt",
+        "source_name": "Controlled casual explanatory text",
+        "source_type": "casual_summary_style",
+        "source_ref": "phase4_internal_externalized_batch1"
+    },
+    {
+        "doc_id": "doc_107",
+        "title": "Formal hypertension overview",
+        "tier": "T1",
+        "source": "formal_reference_style",
+        "path": "data/docs_phase4/doc_107.txt",
+        "source_name": "Controlled formal medical text",
+        "source_type": "formal_reference_style",
+        "source_ref": "phase4_internal_externalized_batch2"
+    },
+    {
+        "doc_id": "doc_108",
+        "title": "Neutral blood pressure summary",
+        "tier": "T2",
+        "source": "reference_style",
+        "path": "data/docs_phase4/doc_108.txt",
+        "source_name": "Controlled neutral medical text",
+        "source_type": "reference_style",
+        "source_ref": "phase4_internal_externalized_batch2"
+    },
+    {
+        "doc_id": "doc_109",
+        "title": "Casual blood pressure explanation",
+        "tier": "T3",
+        "source": "casual_summary_style",
+        "path": "data/docs_phase4/doc_109.txt",
+        "source_name": "Controlled casual medical text",
+        "source_type": "casual_summary_style",
+        "source_ref": "phase4_internal_externalized_batch2"
     }
 ]

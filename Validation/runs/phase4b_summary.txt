@@ -1,0 +1,2 @@
+Phase 4B tested near-semantic collisions under full-corpus conditions and showed 
+that T1 weighting remained strong enough to consistently overtake stronger raw T2/T3 matches even after reducing the T1 multiplier from 1.5 to 1.3.

@@ -172,5 +172,35 @@
         "source_name": "Controlled casual medical text",
         "source_type": "casual_summary_style",
         "source_ref": "phase4_internal_externalized_batch2"
+    },
+    {
+        "doc_id": "doc_110",
+        "title": "Formal fatigue explanation",
+        "tier": "T1",
+        "source": "formal_reference_style",
+        "path": "data/docs_phase4/doc_110.txt",
+        "source_name": "Controlled formal fatigue text",
+        "source_type": "formal_reference_style",
+        "source_ref": "phase4_internal_externalized_batch3"
+    },
+    {
+        "doc_id": "doc_111",
+        "title": "Neutral fatigue summary",
+        "tier": "T2",
+        "source": "reference_style",
+        "path": "data/docs_phase4/doc_111.txt",
+        "source_name": "Controlled neutral fatigue text",
+        "source_type": "reference_style",
+        "source_ref": "phase4_internal_externalized_batch3"
+    },
+    {
+        "doc_id": "doc_112",
+        "title": "Casual fatigue explanation",
+        "tier": "T3",
+        "source": "casual_summary_style",
+        "path": "data/docs_phase4/doc_112.txt",
+        "source_name": "Controlled casual fatigue text",
+        "source_type": "casual_summary_style",
+        "source_ref": "phase4_internal_externalized_batch3"
     }
 ]

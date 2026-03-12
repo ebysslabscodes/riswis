@@ -1,0 +1,69 @@
+RISWIS Phase 4B — Fatigue Domain Controlled Sensitivity Test
+
+Purpose:
+Evaluate tier-weighted ranking behavior under near-semantic collisions using a controlled fatigue-related T1/T2/T3 document trio within the full active corpus.
+
+Controlled Documents:
+doc_110 = T1 (formal fatigue explanation)
+doc_111 = T2 (neutral fatigue summary)
+doc_112 = T3 (casual fatigue explanation)
+
+Active Corpus Context:
+Full manifest active during testing (24 documents total). Older T1/T2/T3 documents remained eligible for retrieval.
+
+--------------------------------------------------
+Baseline Runs (T1 = 1.5, T2 = 1.0, T3 = 0.7)
+--------------------------------------------------
+
+Query: always tired but sleeping
+Raw semantic winner: doc_111 (T2, sim=0.716)
+Weighted winner: doc_110 (T1, weighted=0.928)
+Classification: borderline override / sensitivity
+
+Query: tired all the time need sleep or water
+Raw semantic winner: doc_112 (T3, sim=0.871)
+Weighted winner: doc_110 (T1, weighted=1.003)
+Classification: questionable override / strong sensitivity
+
+Query: body tired all day
+Raw semantic winner: doc_111 (T2, sim=0.690)
+Weighted winner: doc_110 (T1, weighted=0.878)
+Classification: borderline override / sensitivity
+
+Observed secondary behavior:
+Older T1 documents (doc_001, doc_005, doc_107) rose in weighted rank despite lower semantic similarity, indicating broader multiplier influence across corpus.
+
+--------------------------------------------------
+Sensitivity Runs (T1 = 1.3, T2 = 1.0, T3 = 0.7)
+--------------------------------------------------
+
+Query: always tired but sleeping
+Raw semantic winner: doc_111 (T2, sim=0.716)
+Weighted winner: doc_110 (T1, weighted=0.804)
+
+Query: tired all the time need sleep or water
+Raw semantic winner: doc_112 (T3, sim=0.871)
+Weighted winner: doc_110 (T1, weighted=0.869)
+
+Query: body tired all day
+Raw semantic winner: doc_111 (T2, sim=0.690)
+Weighted winner: doc_110 (T1, weighted=0.761)
+
+Sensitivity interpretation:
+Reducing T1 from 1.5 to 1.3 softened weighted margins but did not change final rank outcomes.
+
+--------------------------------------------------
+Phase 4B Interpretation
+--------------------------------------------------
+
+Phase 4B confirms that RISWIS policy weighting remains dominant under near-semantic collisions.
+
+The T1 document consistently moved from raw_rank=3 to weighted_rank=1 across all fatigue-domain queries.
+
+This indicates that:
+- trust weighting remains stable under paraphrase variation
+- semantic winners can still be overtaken by policy
+- multiplier influence extends beyond the controlled trio into full corpus retrieval
+
+Conclusion:
+Phase 4B produced a stable sensitivity signal and is complete for fatigue-domain evaluation.

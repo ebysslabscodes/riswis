@@ -202,5 +202,35 @@
         "source_name": "Controlled casual fatigue text",
         "source_type": "casual_summary_style",
         "source_ref": "phase4_internal_externalized_batch3"
+    },
+    {
+        "doc_id": "doc_113",
+        "title": "Mayo Clinic fatigue excerpt",
+        "tier": "T1",
+        "source": "medical_public_source",
+        "path": "data/docs_phase4/doc_113.txt",
+        "source_name": "Mayo Clinic",
+        "source_type": "public clinical excerpt",
+        "source_ref": "phase4_external_public_batch4"
+    },
+    {
+        "doc_id": "doc_114",
+        "title": "WebMD fatigue excerpt",
+        "tier": "T2",
+        "source": "medical_public_source",
+        "path": "data/docs_phase4/doc_114.txt",
+        "source_name": "WebMD",
+        "source_type": "public explanatory excerpt",
+        "source_ref": "phase4_external_public_batch4"
+    },
+    {
+        "doc_id": "doc_115",
+        "title": "Verywell fatigue excerpt",
+        "tier": "T3",
+        "source": "medical_public_source",
+        "path": "data/docs_phase4/doc_115.txt",
+        "source_name": "Verywell Health",
+        "source_type": "public general health excerpt",
+        "source_ref": "phase4_external_public_batch4"
     }
 ]

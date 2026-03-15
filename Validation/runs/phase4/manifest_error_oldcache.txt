@@ -1,0 +1,16 @@
+Phase 4C manifest update triggered a cache integrity stop.
+
+After adding doc_113, doc_114, and doc_115 to manifest.json, RISWIS detected that the cached embedding manifest hash no longer matched the active corpus definition.
+
+Embeddings/manifest mismatch:
+- cached manifest hash belonged to previous corpus state
+- current manifest hash reflected new Phase 4C entries
+
+System response:
+Runtime halted before retrieval execution.
+
+Required recovery:
+python -m src.retrieval.doc_embeddings
+
+This confirms manifest-hash verification is functioning correctly:
+corpus changes invalidate stale embedding cache automatically before ranking proceeds.

@@ -1,0 +1,90 @@
+First public-source Phase 4C run shows immediate T1 public excerpt visibility.
+
+Query: always tired but sleeping
+
+doc_113 (public Mayo excerpt) entered weighted rank #2 despite raw rank #5.
+
+This indicates tier weighting can elevate externally sourced T1 material even when controlled T2/T3 phrasing scores higher in raw semantic similarity.
+
+Observed pattern:
+raw semantic closeness favored controlled fatigue corpus
+weighted ranking promoted both controlled T1 and external T1 entries
+
+
+Phase 4C public-source fatigue comparison
+
+Run 1
+Query: always tired but sleeping
+
+doc_113 (public Mayo excerpt) entered weighted rank #2 despite raw rank #5.
+
+Observed pattern:
+raw semantic closeness favored controlled fatigue corpus
+weighted ranking promoted both controlled T1 and external T1 entries
+
+Run 2
+Query: tired all the time need sleep or water
+
+doc_112 (controlled T3 casual fatigue text) ranked #1 by raw similarity with sim=0.871, but fell to weighted rank #4 after tier adjustment.
+doc_110 (controlled T1 formal fatigue text) became weighted rank #1.
+doc_113 (public Mayo excerpt, T1) again rose to weighted rank #2 despite raw rank #5.
+
+Observed pattern:
+raw semantic similarity favored more casual fatigue phrasing
+tier weighting consistently promoted T1 entries above higher raw-similarity T2/T3 entries
+public-source T1 material remained competitively visible in final ranking
+
+
+Phase 4C public-source fatigue comparison
+
+Run 1
+Query: always tired but sleeping
+
+doc_113 (public Mayo excerpt) entered weighted rank #2 despite raw rank #5.
+
+Observed pattern:
+raw semantic closeness favored controlled fatigue corpus
+weighted ranking promoted both controlled T1 and external T1 entries
+
+Run 2
+Query: tired all the time need sleep or water
+
+doc_112 (controlled T3 casual fatigue text) ranked #1 by raw similarity with sim=0.871, but fell to weighted rank #4 after tier adjustment.
+doc_110 (controlled T1 formal fatigue text) became weighted rank #1.
+doc_113 (public Mayo excerpt, T1) again rose to weighted rank #2 despite raw rank #5.
+
+Observed pattern:
+raw semantic similarity favored more casual fatigue phrasing
+tier weighting consistently promoted T1 entries above higher raw-similarity T2/T3 entries
+public-source T1 material remained competitively visible in final ranking
+
+Run 3
+Query: body tired all day
+
+doc_111 (controlled T2 neutral fatigue text) ranked #1 by raw similarity.
+doc_113 (public Mayo excerpt, T1) rose from raw rank #4 to weighted rank #1.
+doc_110 (controlled T1 formal fatigue text) rose from raw rank #6 to weighted rank #2.
+doc_114 (public WebMD excerpt, T2) remained visible at weighted rank #4.
+doc_112 (controlled T3 casual fatigue text) dropped from raw rank #2 to weighted rank #5 after tier adjustment.
+
+Observed pattern:
+public-source T1 material did not only remain visible; it became the final top result in this run
+weighted ranking consistently overrode raw semantic closeness when higher-tier documents were present
+public-source T2 material remained visible but did not overtake T1 entries
+doc_115 did not appear in the top 5 across these first three runs
+
+Run 4
+Query: constant tiredness causes
+
+doc_115 (public Verywell excerpt, T3) became raw rank #1 with sim=0.843, the highest semantic score observed among the public-source fatigue entries.
+
+After weighting, doc_115 dropped to weighted rank #5 because the T3 multiplier reduced its final score from 0.843 to 0.590.
+
+doc_113 (public Mayo excerpt, T1) became weighted rank #1.
+doc_110 (controlled T1 fatigue text) became weighted rank #2.
+doc_114 (public WebMD excerpt, T2) remained weighted rank #3.
+
+Observed pattern:
+public-source T3 wording can dominate raw semantic similarity when query phrasing matches directly
+tier weighting still suppresses lower-tier material even when raw relevance is strongest
+all three public-source tiers are now visibly represented across Phase 4C runs

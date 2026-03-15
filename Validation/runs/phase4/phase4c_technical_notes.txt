@@ -1,0 +1,140 @@
+Phase 4C Technical Notes
+------------------------
+
+Phase 4C extends Phase 4 fatigue testing by introducing externally sourced public health excerpts under the same RISWIS weighting system used in earlier controlled comparisons.
+
+Purpose
+-------
+The goal was to observe whether trust-tier weighting remains visible when controlled internal sentence construction is replaced by naturally occurring public-source language.
+
+Unlike Phase 4B, which used internally authored parallel fatigue sentences, Phase 4C uses short excerpts adapted from real public health sources with differing writing style, sentence rhythm, and information density.
+
+Documents Added
+---------------
+doc_113.txt (T1)
+Source: Mayo Clinic
+Tier: T1
+Purpose: high-authority clinical reference
+
+doc_114.txt (T2)
+Source: WebMD
+Tier: T2
+Purpose: established explanatory health source
+
+doc_115.txt (T3)
+Source: Verywell Health
+Tier: T3
+Purpose: public-facing general health article
+
+Source Excerpts
+---------------
+doc_113.txt
+Word count: 35 words
+
+Excerpt:
+Most of the time fatigue can be traced to one or more lifestyle issues, such as poor sleep habits or lack of exercise. Fatigue can be caused by a medicine or linked to depression. Sometimes fatigue is a symptom of an illness that needs treatment.
+
+doc_114.txt
+Word count: 41 words
+
+Excerpt:
+Many physical and mental illnesses, as well as lifestyle factors, can cause fatigue and make it hard to diagnose. In some cases, it may be something simple, such as avoiding caffeine at bedtime. Other causes, like heart disease or COPD, can be more serious and may require long-term treatment.
+
+doc_115.txt
+Word count: 31 words
+
+Excerpt:
+The causes of constant tiredness and fatigue can stem from various factors that affect your energy levels throughout the day. These causes typically fall into four categories: lifestyle factors, medical conditions, sleep disorders, and mental health issues.
+
+Disclosure
+----------
+All three entries are shortened public-source excerpts.
+
+They were trimmed to comparable short lengths to reduce paragraph-length bias while preserving natural source language.
+
+Full ownership remains with original publishers.
+
+Why This Matters
+----------------
+Phase 4B controlled wording structure deliberately.
+
+Phase 4C removes that control and tests whether RISWIS weighting remains visible when:
+
+- sentence structure differs naturally
+- source style differs naturally
+- semantic overlap exists across tiers
+
+This moves testing closer to real retrieval conditions.
+
+Queries Used
+------------
+Run 1:
+always tired but sleeping
+
+Run 2:
+tired all the time need sleep or water
+
+Run 3:
+body tired all day
+
+Run 4:
+constant tiredness causes
+
+Why These Queries
+-----------------
+The first three queries intentionally resemble casual fatigue search phrasing.
+
+They test whether public excerpts compete against previously controlled fatigue documents under ordinary user wording.
+
+The fourth query directly targets wording unique to doc_115:
+
+"constant tiredness causes"
+
+This was added after doc_115 did not appear in earlier top-5 results, to verify whether absence was caused by semantic mismatch rather than retrieval failure.
+
+Observed Results
+----------------
+Run 1:
+doc_113 entered weighted rank #2 despite lower raw rank.
+
+Run 2:
+doc_113 again held weighted rank #2 while T3 controlled wording won raw similarity.
+
+Run 3:
+doc_113 became weighted rank #1.
+
+Run 4:
+doc_115 became raw rank #1 but dropped to weighted rank #5 after T3 multiplier reduction.
+
+Tier Behavior Observed
+----------------------
+T1 public:
+Repeatedly promoted into top weighted positions.
+
+T2 public:
+Visible in middle ranking positions.
+
+T3 public:
+Capable of highest raw semantic similarity when wording matched directly, but strongly reduced after weighting.
+
+Interpretation
+--------------
+Phase 4C confirms that RISWIS weighting behavior remains visible when externally sourced language replaces controlled sentence construction.
+
+This indicates weighting effects are not dependent on internally authored test sentences.
+
+The system continues to separate:
+
+- semantic closeness
+- trust weighting
+- final rank visibility
+
+under mixed real-world source conditions.
+
+Additional Integrity Note
+-------------------------
+Adding doc_113, doc_114, and doc_115 changed manifest.json.
+
+RISWIS correctly halted retrieval until embeddings were regenerated because manifest hash verification detected stale cached embeddings.
+
+This confirms corpus-integrity protection remained active during Phase 4C expansion.

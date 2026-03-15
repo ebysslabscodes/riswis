@@ -1,0 +1,9 @@
+Phase 4C demonstrates all three public-source tiers under identical weighting rules using short fatigue-related excerpts drawn from real public health sources.
+
+Across multiple runs, T1 public material (doc_113) achieved weighted rank #1 and repeatedly entered the top result layer despite lower raw semantic placement.
+
+T2 public material (doc_114) remained consistently visible in middle ranking positions but did not overtake T1 entries.
+
+T3 public material (doc_115) achieved raw rank #1 when query wording directly matched its phrasing, but dropped to weighted rank #5 after tier adjustment.
+
+This makes weighting effects visible across externally sourced documents with naturally differing language, showing that RISWIS ranking behavior remains observable outside controlled internal sentence construction.

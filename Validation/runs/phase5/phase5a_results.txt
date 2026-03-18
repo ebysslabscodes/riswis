@@ -1,0 +1,65 @@
+RISWIS Phase 5A Results
+Representative Runs Across Two Cluster Batches
+
+========================================
+Phase 5A Batch 1
+Initial Cluster Competition
+========================================
+
+Query: persistent fatigue evaluation
+
+doc_013 | tier=T1 | raw_rank=2 | weighted_rank=1 | delta=+1 | sim=0.776 | mult=1.5 | weighted=1.164
+doc_110 | tier=T1 | raw_rank=3 | weighted_rank=2 | delta=+1 | sim=0.743 | mult=1.5 | weighted=1.114
+doc_014 | tier=T1 | raw_rank=4 | weighted_rank=3 | delta=+1 | sim=0.644 | mult=1.5 | weighted=0.966
+doc_113 | tier=T1 | raw_rank=5 | weighted_rank=4 | delta=+1 | sim=0.619 | mult=1.5 | weighted=0.928
+doc_015 | tier=T2 | raw_rank=1 | weighted_rank=5 | delta=-4 | sim=0.787 | mult=1.0 | weighted=0.787
+
+Observation:
+A T2 semantic winner fell to weighted rank 5 under repeated T1 pressure.
+
+----------------------------------------
+
+Query: tired for long periods
+
+doc_113 | tier=T1 | raw_rank=6 | weighted_rank=1 | delta=+5 | sim=0.595 | mult=1.5 | weighted=0.893
+doc_110 | tier=T1 | raw_rank=7 | weighted_rank=2 | delta=+5 | sim=0.580 | mult=1.5 | weighted=0.870
+doc_014 | tier=T1 | raw_rank=9 | weighted_rank=3 | delta=+6 | sim=0.486 | mult=1.5 | weighted=0.729
+doc_013 | tier=T1 | raw_rank=10 | weighted_rank=4 | delta=+6 | sim=0.474 | mult=1.5 | weighted=0.711
+doc_111 | tier=T2 | raw_rank=2 | weighted_rank=5 | delta=-3 | sim=0.663 | mult=1.0 | weighted=0.663
+
+Observation:
+Cluster weighting elevated multiple T1 documents over a stronger semantic T2 candidate.
+
+========================================
+Phase 5A Batch 2
+Counter-Cluster Validation
+========================================
+
+Query: persistent fatigue evaluation
+
+doc_018 | tier=T1 | raw_rank=1 | weighted_rank=1 | delta=+0 | sim=0.865 | mult=1.5 | weighted=1.298
+doc_013 | tier=T1 | raw_rank=4 | weighted_rank=2 | delta=+2 | sim=0.776 | mult=1.5 | weighted=1.164
+doc_110 | tier=T1 | raw_rank=5 | weighted_rank=3 | delta=+2 | sim=0.743 | mult=1.5 | weighted=1.114
+doc_019 | tier=T1 | raw_rank=6 | weighted_rank=4 | delta=+2 | sim=0.676 | mult=1.5 | weighted=1.014
+doc_014 | tier=T1 | raw_rank=7 | weighted_rank=5 | delta=+2 | sim=0.644 | mult=1.5 | weighted=0.966
+
+Observation:
+Even after adding stronger query-close lower-tier phrasing, T1 saturation persisted across weighted top ranks.
+
+----------------------------------------
+
+Query: poor sleep fatigue
+
+doc_110 | tier=T1 | raw_rank=2 | weighted_rank=1 | delta=+1 | sim=0.789 | mult=1.5 | weighted=1.184
+doc_113 | tier=T1 | raw_rank=4 | weighted_rank=2 | delta=+2 | sim=0.712 | mult=1.5 | weighted=1.068
+doc_018 | tier=T1 | raw_rank=8 | weighted_rank=3 | delta=+5 | sim=0.675 | mult=1.5 | weighted=1.013
+doc_019 | tier=T1 | raw_rank=11 | weighted_rank=4 | delta=+7 | sim=0.654 | mult=1.5 | weighted=0.980
+doc_014 | tier=T1 | raw_rank=13 | weighted_rank=5 | delta=+8 | sim=0.629 | mult=1.5 | weighted=0.943
+
+Observation:
+Repeated T1 documents continued to saturate weighted top positions despite broader semantic competition.
+
+========================================
+
+Phase 5A conclusion:
+Both batches produced visible trust-cluster saturation, with repeated T1 presence consistently dominating weighted top ranks under clustered semantic competition.

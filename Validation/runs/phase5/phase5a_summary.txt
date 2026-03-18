@@ -1,0 +1,49 @@
+RISWIS Phase 5A Summary
+Cluster Competition Validation
+
+Objective:
+Phase 5A tested whether RISWIS governance remains interpretable when multiple semantically similar documents compete across trust tiers.
+
+Design:
+A clustered fatigue corpus was introduced using controlled trust tiers.
+
+Batch 1:
+Initial cluster introduced with:
+- T1 = 2 documents
+- T2 = 1 document
+- T3 = 2 documents
+
+Batch 2:
+Counter-cluster introduced with stronger lexical similarity in lower-tier phrasing:
+- T1 = 2 additional documents
+- T2 = 1 additional document
+- T3 = 2 additional documents
+
+Queries used across runs:
+- persistent fatigue evaluation
+- prolonged exhaustion
+- tired for long periods
+- poor sleep fatigue
+
+Observed Result:
+RISWIS governance remained fully visible under clustered semantic competition.
+
+Across repeated runs:
+- raw semantic winners remained observable
+- weighted rank changes remained deterministic
+- delta movement remained explainable
+
+Primary finding:
+Repeated T1 presence produced measurable saturation of weighted top ranks.
+
+Batch 1 finding:
+A semantically strongest T2 candidate fell after weighting when multiple T1 documents competed closely.
+
+Batch 2 finding:
+Even after adding stronger query-close lower-tier phrasing, repeated T1 documents continued to dominate weighted top ranks.
+
+Meaning:
+Phase 5A established that RISWIS behavior under cluster pressure remains interpretable, but trust clusters can collectively suppress lower-tier candidates even when semantic similarity remains strong.
+
+Phase significance:
+This extends RISWIS beyond isolated override behavior into clustered retrieval pressure analysis.

@@ -84,6 +84,76 @@
         "path": "data/docs/doc_012.txt"
     },
     {
+        "doc_id": "doc_013",
+        "title": "Clinical fatigue duration review",
+        "tier": "T1",
+        "source": "clinical_reference",
+        "path": "data/docs/doc_013.txt"
+    },
+    {
+        "doc_id": "doc_014",
+        "title": "Medical exhaustion assessment guidance",
+        "tier": "T1",
+        "source": "medical_guidance",
+        "path": "data/docs/doc_014.txt"
+    },
+    {
+        "doc_id": "doc_015",
+        "title": "Neutral fatigue symptom summary",
+        "tier": "T2",
+        "source": "reference_summary",
+        "path": "data/docs/doc_015.txt"
+    },
+    {
+        "doc_id": "doc_016",
+        "title": "Casual fatigue daily stress explanation",
+        "tier": "T3",
+        "source": "casual_summary",
+        "path": "data/docs/doc_016.txt"
+    },
+    {
+        "doc_id": "doc_017",
+        "title": "Exhaustion and poor sleep description",
+        "tier": "T3",
+        "source": "casual_summary",
+        "path": "data/docs/doc_017.txt"
+    },
+    {
+        "doc_id": "doc_018",
+        "title": "Persistent fatigue evaluation review",
+        "tier": "T1",
+        "source": "clinical_reference",
+        "path": "data/docs/doc_018.txt"
+    },
+    {
+        "doc_id": "doc_019",
+        "title": "Clinical exhaustion assessment guidance",
+        "tier": "T1",
+        "source": "medical_guidance",
+        "path": "data/docs/doc_019.txt"
+    },
+    {
+        "doc_id": "doc_020",
+        "title": "Neutral ongoing fatigue summary",
+        "tier": "T2",
+        "source": "reference_summary",
+        "path": "data/docs/doc_020.txt"
+    },
+    {
+        "doc_id": "doc_021",
+        "title": "Tired for long periods explanation",
+        "tier": "T3",
+        "source": "casual_summary",
+        "path": "data/docs/doc_021.txt"
+    },
+    {
+        "doc_id": "doc_022",
+        "title": "Poor sleep fatigue description",
+        "tier": "T3",
+        "source": "casual_summary",
+        "path": "data/docs/doc_022.txt"
+    },
+    {
         "doc_id": "doc_101",
         "title": "Formal retrieval ranking overview",
         "tier": "T1",

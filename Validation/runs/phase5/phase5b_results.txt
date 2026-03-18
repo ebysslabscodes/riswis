@@ -1,0 +1,93 @@
+RISWIS Phase 5B Results
+Query Pressure Validation
+
+Objective:
+Test whether RISWIS governance remains interpretable when query wording changes across the same clustered corpus without altering documents, tiers, or manifest structure.
+
+Configuration:
+top_k = 5
+tier multipliers:
+T1 = 1.5
+T2 = 1.0
+T3 = 0.7
+
+Corpus:
+Phase 5A corpus retained unchanged.
+
+----------------------------------------
+Query 1: persistent fatigue evaluation
+----------------------------------------
+
+doc_018 | tier=T1 | raw_rank=1 | weighted_rank=1 | delta=+0 | sim=0.865 | mult=1.5 | weighted=1.298
+doc_013 | tier=T1 | raw_rank=4 | weighted_rank=2 | delta=+2 | sim=0.776 | mult=1.5 | weighted=1.164
+doc_110 | tier=T1 | raw_rank=5 | weighted_rank=3 | delta=+2 | sim=0.743 | mult=1.5 | weighted=1.114
+doc_019 | tier=T1 | raw_rank=6 | weighted_rank=4 | delta=+2 | sim=0.676 | mult=1.5 | weighted=1.014
+doc_014 | tier=T1 | raw_rank=7 | weighted_rank=5 | delta=+2 | sim=0.644 | mult=1.5 | weighted=0.966
+
+Observation:
+Stable T1 dominance with modest upward weighting.
+
+----------------------------------------
+Query 2: prolonged exhaustion causes
+----------------------------------------
+
+doc_019 | tier=T1 | raw_rank=3 | weighted_rank=1 | delta=+2 | sim=0.687 | mult=1.5 | weighted=1.031
+doc_110 | tier=T1 | raw_rank=4 | weighted_rank=2 | delta=+2 | sim=0.682 | mult=1.5 | weighted=1.023
+doc_014 | tier=T1 | raw_rank=6 | weighted_rank=3 | delta=+3 | sim=0.668 | mult=1.5 | weighted=1.001
+doc_113 | tier=T1 | raw_rank=7 | weighted_rank=4 | delta=+3 | sim=0.650 | mult=1.5 | weighted=0.975
+doc_018 | tier=T1 | raw_rank=14 | weighted_rank=5 | delta=+9 | sim=0.554 | mult=1.5 | weighted=0.832
+
+Observation:
+Strong semantic reshuffling with visible T1 recovery from low raw rank.
+
+----------------------------------------
+Query 3: why am I tired all the time
+----------------------------------------
+
+doc_113 | tier=T1 | raw_rank=5 | weighted_rank=1 | delta=+4 | sim=0.703 | mult=1.5 | weighted=1.054
+doc_110 | tier=T1 | raw_rank=8 | weighted_rank=2 | delta=+6 | sim=0.638 | mult=1.5 | weighted=0.957
+doc_019 | tier=T1 | raw_rank=12 | weighted_rank=3 | delta=+9 | sim=0.570 | mult=1.5 | weighted=0.855
+doc_018 | tier=T1 | raw_rank=13 | weighted_rank=4 | delta=+9 | sim=0.532 | mult=1.5 | weighted=0.798
+doc_014 | tier=T1 | raw_rank=14 | weighted_rank=5 | delta=+9 | sim=0.501 | mult=1.5 | weighted=0.751
+
+Observation:
+Casual wording increased semantic spread and amplified weighting visibility.
+
+----------------------------------------
+Query 4: poor sleep fatigue
+----------------------------------------
+
+doc_110 | tier=T1 | raw_rank=2 | weighted_rank=1 | delta=+1 | sim=0.789 | mult=1.5 | weighted=1.184
+doc_113 | tier=T1 | raw_rank=4 | weighted_rank=2 | delta=+2 | sim=0.712 | mult=1.5 | weighted=1.068
+doc_018 | tier=T1 | raw_rank=8 | weighted_rank=3 | delta=+5 | sim=0.675 | mult=1.5 | weighted=1.013
+doc_019 | tier=T1 | raw_rank=11 | weighted_rank=4 | delta=+7 | sim=0.654 | mult=1.5 | weighted=0.980
+doc_014 | tier=T1 | raw_rank=13 | weighted_rank=5 | delta=+8 | sim=0.629 | mult=1.5 | weighted=0.943
+
+Observation:
+Sleep-linked wording partially tightened semantic alignment while preserving visible weighting.
+
+----------------------------------------
+Query 5: feeling drained every day
+----------------------------------------
+
+doc_110 | tier=T1 | raw_rank=8 | weighted_rank=1 | delta=+7 | sim=0.492 | mult=1.5 | weighted=0.739
+doc_113 | tier=T1 | raw_rank=12 | weighted_rank=2 | delta=+10 | sim=0.464 | mult=1.5 | weighted=0.696
+doc_019 | tier=T1 | raw_rank=13 | weighted_rank=3 | delta=+10 | sim=0.452 | mult=1.5 | weighted=0.678
+doc_018 | tier=T1 | raw_rank=14 | weighted_rank=4 | delta=+10 | sim=0.445 | mult=1.5 | weighted=0.667
+doc_111 | tier=T2 | raw_rank=1 | weighted_rank=5 | delta=-4 | sim=0.622 | mult=1.0 | weighted=0.622
+
+Observation:
+First clear raw T2 winner displaced after weighting.
+
+----------------------------------------
+Query 6: when is fatigue a medical concern
+----------------------------------------
+
+doc_013 | tier=T1 | raw_rank=3 | weighted_rank=1 | delta=+2 | sim=0.750 | mult=1.5 | weighted=1.124
+doc_018 | tier=T1 | raw_rank=4 | weighted_rank=2 | delta=+2 | sim=0.727 | mult=1.5 | weighted=1.091
+doc_113 | tier=T1 | raw_rank=5 | weighted_rank=3 | delta=+2 | sim=0.693 | mult=1.5 | weighted=1.040
+doc_110 | tier=T1 | raw_rank=6 | weighted_rank=4 | delta=+2 | sim=0.686 | mult=1.5 | weighted=1.030
+doc_019 | tier=T1 | raw_rank=8 | weighted_rank=5 | delta=+3 | sim=0.655 | mult=1.5 | weighted=0.983
+
+Observation:
+Serious medical phrasing tightened semantic ranking and reduced large delta movement.

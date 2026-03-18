@@ -1,0 +1,71 @@
+RISWIS Phase 5B Summary
+Query Pressure Validation
+
+Phase 5B tested whether RISWIS ranking behavior remains interpretable when query wording changes across an unchanged clustered corpus.
+
+Unlike Phase 5A, no new documents were added and no manifest changes were made. The purpose was to isolate query variation as the only changing variable.
+
+Six fatigue-related queries were run across formal, casual, symptom-based, and threshold-oriented phrasing.
+
+What was observed:
+
+1. Final weighted rankings consistently ended with T1 documents occupying the top positions.
+
+2. Raw semantic rankings varied significantly depending on wording.
+
+3. Formal medical wording produced relatively stable raw ordering, with T1 documents already near the top before weighting.
+
+4. Casual or emotionally broad wording produced much larger raw rank dispersion, with some T1 documents beginning as low as raw ranks 12 through 14 before recovering through weighting.
+
+5. One query ("feeling drained every day") produced the first clear raw T2 winner:
+   doc_111 ranked first in raw similarity but fell to weighted rank five after T1 weighting was applied.
+
+Why this matters:
+
+Phase 5B shows that RISWIS does not simply freeze one answer.
+
+The semantic layer still responds to wording differences.
+
+What remains visible is how governance changes final order.
+
+This means raw semantic preference and final weighted preference can diverge while remaining fully inspectable.
+
+Real-world interpretation:
+
+A person asking:
+"persistent fatigue evaluation"
+
+and another asking:
+"why am I tired all the time"
+
+may trigger different raw semantic matches.
+
+RISWIS shows exactly how trusted sources recover or remain stable under those wording changes rather than hiding rank corrections.
+
+Important technical implication:
+
+At current multipliers:
+
+T1 = 1.5
+T2 = 1.0
+T3 = 0.7
+
+T1 weighting is strong enough that moderate semantic gaps usually do not survive final ranking.
+
+This does not mean lower-tier documents never lead raw ranking.
+
+It means current governance strength remains dominant when semantic distances are not extreme.
+
+Multiplier sensitivity observation:
+
+Phase 5B results suggest that lower T1 values (for example 1.2) would likely alter some final outcomes.
+
+This was not run experimentally in Phase 5B, but one observed case showed a T2 raw winner close enough that reduced T1 weighting would likely change final rank order.
+
+Conclusion:
+
+Phase 5B confirms that RISWIS governance remains visible under query variation.
+
+The semantic layer changes.
+The governance layer remains inspectable.
+Final rank movement stays auditable.

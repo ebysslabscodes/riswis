@@ -1,0 +1,88 @@
+RISWIS Phase 5C Results
+Multiplier Sensitivity Validation
+
+Objective:
+Test whether small changes in T1 multiplier strength alter final weighted rank ownership under an unchanged retrieval event.
+
+Configuration:
+top_k = 5
+
+T2 = 1.0
+T3 = 0.7
+
+Corpus:
+Phase 5A / 5B corpus retained unchanged.
+
+Query:
+"feeling drained every day"
+
+This query was selected because Phase 5B produced the strongest semantic/governance conflict:
+doc_111 held raw rank 1 under baseline but lost final weighted rank after T1 weighting.
+
+----------------------------------------
+T1 = 1.5 (baseline)
+----------------------------------------
+
+doc_110 | tier=T1 | raw_rank=8 | weighted_rank=1 | delta=+7 | sim=0.492 | mult=1.5 | weighted=0.739
+doc_113 | tier=T1 | raw_rank=12 | weighted_rank=2 | delta=+10 | sim=0.464 | mult=1.5 | weighted=0.696
+doc_019 | tier=T1 | raw_rank=13 | weighted_rank=3 | delta=+10 | sim=0.452 | mult=1.5 | weighted=0.678
+doc_018 | tier=T1 | raw_rank=14 | weighted_rank=4 | delta=+10 | sim=0.445 | mult=1.5 | weighted=0.667
+doc_111 | tier=T2 | raw_rank=1 | weighted_rank=5 | delta=-4 | sim=0.622 | mult=1.0 | weighted=0.622
+
+Observation:
+Baseline governance strongly displaced the raw T2 winner.
+
+----------------------------------------
+T1 = 1.3
+----------------------------------------
+
+doc_110 | tier=T1 | raw_rank=8 | weighted_rank=1 | delta=+7 | sim=0.492 | mult=1.3 | weighted=0.640
+doc_111 | tier=T2 | raw_rank=1 | weighted_rank=2 | delta=-1 | sim=0.622 | mult=1.0 | weighted=0.622
+doc_113 | tier=T1 | raw_rank=12 | weighted_rank=3 | delta=+9 | sim=0.464 | mult=1.3 | weighted=0.603
+doc_019 | tier=T1 | raw_rank=13 | weighted_rank=4 | delta=+9 | sim=0.452 | mult=1.3 | weighted=0.587
+doc_018 | tier=T1 | raw_rank=14 | weighted_rank=5 | delta=+9 | sim=0.445 | mult=1.3 | weighted=0.578
+
+Observation:
+T1 retained weighted rank 1, but only narrowly.
+
+Margin between first and second result:
+0.018
+
+----------------------------------------
+T1 = 1.2
+----------------------------------------
+
+doc_111 | tier=T2 | raw_rank=1 | weighted_rank=1 | delta=+0 | sim=0.622 | mult=1.0 | weighted=0.622
+doc_110 | tier=T1 | raw_rank=8 | weighted_rank=2 | delta=+6 | sim=0.492 | mult=1.2 | weighted=0.591
+doc_113 | tier=T1 | raw_rank=12 | weighted_rank=3 | delta=+9 | sim=0.464 | mult=1.2 | weighted=0.557
+doc_019 | tier=T1 | raw_rank=13 | weighted_rank=4 | delta=+9 | sim=0.452 | mult=1.2 | weighted=0.542
+doc_020 | tier=T2 | raw_rank=5 | weighted_rank=5 | delta=+0 | sim=0.539 | mult=1.0 | weighted=0.539
+
+Observation:
+The raw T2 winner survived final weighted rank 1.
+
+----------------------------------------
+T1 = 1.1
+----------------------------------------
+
+doc_111 | tier=T2 | raw_rank=1 | weighted_rank=1 | delta=+0 | sim=0.622 | mult=1.0 | weighted=0.622
+doc_110 | tier=T1 | raw_rank=8 | weighted_rank=2 | delta=+6 | sim=0.492 | mult=1.1 | weighted=0.542
+doc_020 | tier=T2 | raw_rank=5 | weighted_rank=3 | delta=+2 | sim=0.539 | mult=1.0 | weighted=0.539
+doc_113 | tier=T1 | raw_rank=12 | weighted_rank=4 | delta=+8 | sim=0.464 | mult=1.1 | weighted=0.510
+doc_019 | tier=T1 | raw_rank=13 | weighted_rank=5 | delta=+8 | sim=0.452 | mult=1.1 | weighted=0.497
+
+Observation:
+Semantic preservation increased further.
+A second T2 document entered weighted rank 3.
+
+----------------------------------------
+Result
+----------------------------------------
+
+A multiplier change of 0.1 between 1.2 and 1.3 changed final rank ownership for the same retrieval event.
+
+Threshold identified between:
+
+T1 = 1.2 and T1 = 1.3
+
+This confirms a measurable transition zone where governance weighting and semantic similarity exchange control of final ranking.

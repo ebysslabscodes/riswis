@@ -6,13 +6,76 @@ This demo shows, with real output, how trust policy can override semantic simila
 
 ---
 
+## Get the Code
+
+You can either download or clone the repository.
+
+### Option A — Download ZIP (easiest)
+
+- Click the green **Code** button on GitHub  
+- Select **Download ZIP**  
+- Extract the folder  
+- Open a terminal inside the extracted folder  
+
+### Option B — Clone with Git
+
+```bash
+git clone https://github.com/ebysslabscodes/riswis.git
+cd riswis
+```
+
+Make sure you are inside the `riswis` folder before continuing.
+
+---
+
 ## Run It
 
+```bash
+# 1. Create environment
 python -m venv testenv
+
+# 2. Activate (Windows)
 testenv\Scripts\activate
+
+# 3. Install dependencies
 pip install -r requirements.txt
 
+# 4. IMPORTANT: Generate embeddings (required on first run)
+python -m src.retrieval.doc_embeddings
+
+# 5. Run the demo
 python demo.py
+```
+
+---
+
+## ⚠️ Common First-Run Issue
+
+If you see an error like:
+
+```
+Missing embeddings file: data/doc_embeddings.npz
+```
+
+or
+
+```
+Doc 'doc_101' path does not exist
+```
+
+It means embeddings have not been generated yet.
+
+Fix:
+
+```bash
+python -m src.retrieval.doc_embeddings
+```
+
+Then run:
+
+```bash
+python demo.py
+```
 
 ---
 
@@ -30,9 +93,11 @@ You can see exactly how ranking changed.
 
 ## Change the Outcome
 
-python demo.py --t1 1.2  
-python demo.py --t1 1.3  
-python demo.py --t1 1.5  
+```bash
+python demo.py --t1 1.2
+python demo.py --t1 1.3
+python demo.py --t1 1.5
+```
 
 Higher values increase the influence of trusted sources.
 
@@ -40,8 +105,10 @@ Higher values increase the influence of trusted sources.
 
 ## Change the Query
 
-python demo.py --query "feeling drained every day"  
-python demo.py --query "why am I tired all the time"  
+```bash
+python demo.py --query "feeling drained every day"
+python demo.py --query "why am I tired all the time"
+```
 
 Small wording changes affect semantic ranking — RISWIS shows how policy responds.
 

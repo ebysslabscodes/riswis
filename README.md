@@ -1,6 +1,6 @@
 # RISWIS
 
-Retrieval Integrity & Structured Weighted Information System
+Retrieval Integrity & Structured Weighted Information System (RISWIS)
 
 ![RISWIS GRL Overview](./assets/riswis_grl_overview.png)
 
@@ -37,9 +37,9 @@ RISWIS introduces a Governance Retrieval Layer (GRL) between retrieval and gener
 
 Retrieval finds semantically similar documents  
 GRL applies trust policy and reorders them  
-The LLM uses only the policy-weighted results  
+The LLM would use the policy-weighted results  
 
-The LLM does not control source selection — it uses what GRL provides.
+RISWIS governs ranking after retrieval and before generation.
 
 ---
 

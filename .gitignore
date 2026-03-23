@@ -22,6 +22,8 @@ data/*
 !data/manifest.json
 !data/docs/
 !data/docs/*.txt
+!data/docs_phase4/
+!data/docs_phase4/*.txt
 
 # OS junk
 

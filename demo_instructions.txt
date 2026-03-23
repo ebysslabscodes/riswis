@@ -1,0 +1,105 @@
+RISWIS Demo Instructions
+-----------------------
+
+This demo shows how the Governance Retrieval Layer (GRL) changes ranking
+before results reach the LLM.
+
+The goal:
+See how trust weighting (T1 / T2 / T3) affects which documents win.
+
+--------------------------------------------------
+
+1. Setup (fresh environment recommended)
+
+python -m venv testenv
+testenv\Scripts\activate   (Windows)
+
+pip install -r requirements.txt
+
+--------------------------------------------------
+
+2. Run the demo (default behavior)
+
+python demo.py
+
+This uses default multipliers:
+T1 = 1.5
+T2 = 1.0
+T3 = 0.7
+
+You will see:
+- GRL Results (raw vs weighted ranking)
+- What changed (which documents moved)
+- Detection (whether a rank flip occurred)
+
+--------------------------------------------------
+
+3. Change trust weighting (interactive demo)
+
+Try:
+
+python demo.py --t1 1.2
+python demo.py --t1 1.3
+
+What to observe:
+
+At T1 = 1.2
+- Semantic winner stays on top
+- No rank flip
+
+At T1 = 1.3
+- Higher trust documents take over
+- Rank flip occurs
+
+--------------------------------------------------
+
+4. Change the query
+
+python demo.py --query "why am I tired all the time"
+
+Different queries may:
+- show strong trust promotion
+- or show no rank flip at all
+
+--------------------------------------------------
+
+5. What “Rank Flip” means
+
+A rank flip happens when:
+
+- The semantic winner (highest similarity)
+  is NOT the final winner
+
+- The policy-weighted result becomes the winner instead
+
+You will see:
+
+⚠️ Rank flip detected: semantic winner and policy winner differ
+
+This means:
+GRL changed the outcome based on trust weighting.
+
+--------------------------------------------------
+
+6. Important Notes
+
+- This demo temporarily overrides tier multipliers
+  but restores settings after each run
+
+- Core RISWIS logic is NOT modified
+
+- This is a demonstration of behavior,
+  not a full application or UI
+
+--------------------------------------------------
+
+7. What this demo proves
+
+- Ranking is not fixed — it is controllable
+- Trust policy can override similarity
+- All ranking decisions are visible and auditable
+- The system is reproducible across environments
+
+--------------------------------------------------
+
+End

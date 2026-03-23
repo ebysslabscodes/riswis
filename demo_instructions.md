@@ -3,10 +3,10 @@
 This demo shows how the Governance Retrieval Layer (GRL) changes ranking  
 before results reach the LLM.
 
-The goal:  
+**Goal:**  
 See how trust weighting (T1 / T2 / T3) affects which documents win.
 
---------------------------------------------------
+---
 
 ## 0. Get the Code
 
@@ -28,7 +28,7 @@ cd riswis
 
 Make sure you are inside the `riswis` folder before continuing.
 
---------------------------------------------------
+---
 
 ## 1. Setup (fresh environment recommended)
 
@@ -39,7 +39,7 @@ testenv\Scripts\activate   # Windows
 pip install -r requirements.txt
 ```
 
---------------------------------------------------
+---
 
 ## 2. IMPORTANT: Generate embeddings (first run only)
 
@@ -55,7 +55,7 @@ If you skip this step, you may see errors like:
 - Missing embeddings file  
 - Doc path does not exist  
 
---------------------------------------------------
+---
 
 ## 3. Run the demo (default behavior)
 
@@ -75,7 +75,7 @@ You will see:
 - What changed (which documents moved)  
 - Detection (whether a rank flip occurred)  
 
---------------------------------------------------
+---
 
 ## 4. Change trust weighting (interactive demo)
 
@@ -85,17 +85,17 @@ python demo.py --t1 1.3
 python demo.py --t1 1.5
 ```
 
-What to observe:
+**What to observe:**
 
-At T1 = 1.2  
+At **T1 = 1.2**
 - Semantic winner stays on top  
 - No rank flip  
 
-At T1 = 1.3  
+At **T1 = 1.3**
 - Higher trust documents take over  
 - Rank flip occurs  
 
---------------------------------------------------
+---
 
 ## 5. Change the query
 
@@ -108,14 +108,14 @@ Different queries may:
 - show strong trust promotion  
 - or show no rank flip at all  
 
---------------------------------------------------
+---
 
 ## 6. What “Rank Flip” means
 
 A rank flip happens when:
 
 - The semantic winner (highest similarity)  
-  is NOT the final winner  
+  is **NOT** the final winner  
 
 - The policy-weighted result becomes the winner instead  
 
@@ -126,19 +126,19 @@ You will see:
 This means:  
 GRL changed the outcome based on trust weighting.
 
---------------------------------------------------
+---
 
 ## 7. Important Notes
 
 - This demo temporarily overrides tier multipliers  
   but restores settings after each run  
 
-- Core RISWIS logic is NOT modified  
+- Core RISWIS logic is **NOT modified**  
 
 - This is a demonstration of behavior,  
   not a full application or UI  
 
---------------------------------------------------
+---
 
 ## 8. What this demo proves
 
@@ -147,9 +147,9 @@ GRL changed the outcome based on trust weighting.
 - All ranking decisions are visible and auditable  
 - The system is reproducible across environments  
 
---------------------------------------------------
+---
 
 ## End
 
 This is the demo.  
-The full system is in README.md.
+The full system is in `README.md`.

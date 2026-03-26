@@ -4,12 +4,12 @@ Retrieval Integrity & Structured Weighted Information System (RISWIS)
 
 ![RISWIS GRL Overview](./assets/riswis_grl_overview.png)
 
-RISWIS acts as a Governance Retrieval Layer (GRL) between retrieval and generation, making ranking decisions visible and auditable.
+RISWIS acts as a Governance Retrieval Layer (GRL) between retrieval and generation — the point where ranking becomes an explicit, auditable decision rather than an implicit side effect.
 
 A governance-first retrieval prototype that separates semantic similarity from ranking policy through explicit tier weighting, corpus integrity enforcement, and auditable ranking behavior.
 
 RISWIS also functions as a Governance Retrieval Layer (GRL):  
-it controls what the AI sees before it answers — and shows why.
+it controls what the AI sees before it answers — and makes that decision visible.
 
 ---
 
@@ -27,6 +27,8 @@ For a quick interactive walkthrough of RISWIS behavior, see:
 
 demo_readme.md
 
+Visual outputs demonstrating GRL behavior (alignment, threshold, and policy override) are available in the media/ folder and correspond directly to the system’s observed ranking behavior.
+
 ---
 
 ## Where RISWIS Fits (GRL)
@@ -40,6 +42,8 @@ GRL applies trust policy and reorders them
 The LLM would use the policy-weighted results  
 
 RISWIS governs ranking after retrieval and before generation.
+
+This is the only stage in the pipeline where policy is applied — making it the system’s control point.
 
 ---
 
